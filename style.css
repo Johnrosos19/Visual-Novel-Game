@@ -15,7 +15,7 @@ body {
 }
 
 .vn-container {
-    max-width: 1200px;
+    max-width: 1300px;
     width: 100%;
     background: #1a1a1a;
     border-radius: 36px;
@@ -26,11 +26,11 @@ body {
 .art-stage {
     position: relative;
     background: #0a0a0a;
-    min-height: 400px;
+    min-height: 450px;
     aspect-ratio: 16 / 9;
     width: 100%;
     overflow: hidden;
-    border-bottom: 2px solid #b8860b;
+    border-bottom: 2px solid #d4af37;
 }
 
 #bgCanvas {
@@ -41,24 +41,54 @@ body {
     height: 100%;
     object-fit: cover;
     background: #0a0a0a;
+    z-index: 1;
 }
 
-.character-sprite {
+.character-portrait-frame {
     position: absolute;
-    bottom: 0;
-    right: 5%;
-    width: 30%;
-    max-width: 260px;
-    filter: drop-shadow(8px 12px 18px rgba(0,0,0,0.6));
-    transition: opacity 0.3s ease;
-    pointer-events: none;
+    bottom: 20px;
+    left: 20px;
+    width: 180px;
+    height: 220px;
+    z-index: 2;
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9));
+    border-radius: 20px;
+    border: 3px solid #d4af37;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    overflow: hidden;
+    backdrop-filter: blur(4px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+}
+
+#portraitCanvas {
+    width: 140px;
+    height: 140px;
+    display: block;
+    border-radius: 50%;
+    border: 2px solid #d4af37;
+    margin-top: 5px;
+}
+
+.character-name-tag {
+    background: #d4af37;
+    color: #1a1a1a;
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 10px;
+    text-align: center;
+    font-family: monospace;
 }
 
 .dialogue-panel {
     background: rgba(20, 20, 30, 0.96);
     backdrop-filter: blur(6px);
     padding: 1.4rem 2rem 1.8rem 2rem;
-    border-top: 1px solid #b8860b;
+    border-top: 1px solid #d4af37;
 }
 
 .speaker-name {
@@ -68,7 +98,7 @@ body {
     color: #d4af37;
     text-shadow: 0 2px 3px black;
     margin-bottom: 0.6rem;
-    border-left: 5px solid #b8860b;
+    border-left: 5px solid #d4af37;
     padding-left: 1rem;
 }
 
@@ -83,14 +113,14 @@ body {
 
 .choices-area {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 0.8rem;
     margin: 1rem 0 0.5rem 0;
 }
 
 .choice-btn {
     background: #2a2418;
-    border: 1px solid #b8860b;
+    border: 1px solid #d4af37;
     padding: 0.7rem 1rem;
     font-size: 0.95rem;
     font-weight: 600;
@@ -103,9 +133,10 @@ body {
 }
 
 .choice-btn:hover {
-    background: #b8860b;
+    background: #d4af37;
     color: black;
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212,175,55,0.3);
 }
 
 .progress-bar-container {
@@ -114,14 +145,15 @@ body {
 
 .progress-label {
     font-size: 0.7rem;
-    color: #b8860b;
+    color: #d4af37;
     margin-bottom: 4px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    font-weight: bold;
 }
 
 .progress-bar {
     width: 100%;
-    height: 8px;
+    height: 10px;
     background: #2a2418;
     border-radius: 10px;
     overflow: hidden;
@@ -130,9 +162,16 @@ body {
 .progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #b8860b, #d4af37);
+    background: linear-gradient(90deg, #d4af37, #ffd700);
     border-radius: 10px;
     transition: width 0.3s ease;
+}
+
+.progress-stats {
+    font-size: 0.65rem;
+    color: #aaa;
+    margin-top: 5px;
+    text-align: right;
 }
 
 .game-controls {
@@ -144,18 +183,20 @@ body {
 
 .ctrl-btn {
     background: #2a2418;
-    border: 1px solid #b8860b;
+    border: 1px solid #d4af37;
     font-size: 0.9rem;
     padding: 0.5rem 1.2rem;
     border-radius: 40px;
     font-weight: 600;
     color: #cdd9ff;
     cursor: pointer;
+    transition: all 0.2s;
 }
 
 .ctrl-btn:hover {
-    background: #b8860b;
+    background: #d4af37;
     color: black;
+    transform: scale(1.02);
 }
 
 .fade-text {
@@ -198,11 +239,25 @@ footer {
     font-size: 0.7rem;
     text-align: center;
     padding: 0.6rem;
-    color: #b8860b;
+    color: #d4af37;
     background: #0a0a0a;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
+    .character-portrait-frame {
+        width: 120px;
+        height: 150px;
+        bottom: 10px;
+        left: 10px;
+    }
+    #portraitCanvas {
+        width: 90px;
+        height: 90px;
+    }
+    .character-name-tag {
+        font-size: 0.6rem;
+        padding: 2px 8px;
+    }
     .choices-area {
         grid-template-columns: 1fr;
     }
