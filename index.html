@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Echoes of the Lost Star · Visual Novel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="vn-container">
+    <div class="art-stage">
+        <canvas id="bgCanvas" width="1280" height="720"></canvas>
+        <img id="spriteImg" class="character-sprite" src="" alt="character">
+    </div>
+    <div class="dialogue-panel">
+        <div class="speaker-name" id="speakerName">———</div>
+        <div class="message-text" id="messageText">Click "Start" or press Next to begin your journey...</div>
+        <div id="choicesContainer" class="choices-area"></div>
+        <div class="game-controls">
+            <button id="resetBtn" class="ctrl-btn">⟳ RESTART</button>
+            <button id="nextBtn" class="ctrl-btn">▶ NEXT</button>
+        </div>
+    </div>
+    <footer>✦ Echoes of the Lost Star · a visual novel ✦</footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

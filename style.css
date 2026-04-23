@@ -1,0 +1,188 @@
+* {
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', 'Poppins', 'Merriweather', 'Georgia', serif;
+    margin: 0;
+    padding: 20px;
+}
+
+.vn-container {
+    max-width: 1100px;
+    width: 100%;
+    background: #1a1f2e;
+    border-radius: 36px;
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+    transition: all 0.2s;
+}
+
+.art-stage {
+    position: relative;
+    background: #0e1424;
+    min-height: 400px;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: 2px solid #2e3a5e;
+}
+
+#bgCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #0a0f1c;
+}
+
+.character-sprite {
+    position: absolute;
+    bottom: 0;
+    right: 5%;
+    width: 32%;
+    max-width: 280px;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(8px 12px 18px rgba(0,0,0,0.5));
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.dialogue-panel {
+    background: rgba(22, 28, 44, 0.96);
+    backdrop-filter: blur(6px);
+    padding: 1.4rem 2rem 1.8rem 2rem;
+    border-top: 1px solid #3e4a6e;
+    box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.speaker-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #f5d742;
+    text-shadow: 0 2px 3px black;
+    margin-bottom: 0.6rem;
+    border-left: 5px solid #f5b642;
+    padding-left: 1rem;
+    font-family: 'Segoe UI', 'Poppins', sans-serif;
+}
+
+.message-text {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: #f0f3fa;
+    font-weight: 500;
+    margin-bottom: 1.6rem;
+    min-height: 4rem;
+    text-shadow: 0 1px 1px black;
+}
+
+.choices-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1rem 0 0.5rem 0;
+    justify-content: flex-start;
+}
+
+.choice-btn {
+    background: #252e48;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    font-family: inherit;
+    color: #f0eef7;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 3px 0 #0f121c;
+    letter-spacing: 0.3px;
+}
+
+.choice-btn:hover {
+    background: #3d4a70;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 #0f121c;
+}
+
+.choice-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #0f121c;
+}
+
+.game-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.ctrl-btn {
+    background: #1e2740;
+    border: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 600;
+    color: #cdd9ff;
+    cursor: pointer;
+    transition: 0.1s linear;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+.ctrl-btn:hover {
+    background: #2f3b60;
+    color: white;
+}
+
+.fade-text {
+    animation: gentleFade 0.2s ease-out;
+}
+
+@keyframes gentleFade {
+    from { opacity: 0; transform: translateY(6px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+
+@media (max-width: 680px) {
+    .dialogue-panel {
+        padding: 1rem 1.2rem;
+    }
+    .speaker-name {
+        font-size: 1.3rem;
+    }
+    .message-text {
+        font-size: 1rem;
+    }
+    .choice-btn {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.85rem;
+    }
+    .character-sprite {
+        width: 40%;
+        right: 2%;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+footer {
+    font-size: 0.7rem;
+    text-align: center;
+    padding: 0.6rem;
+    color: #5a6a8a;
+    background: #0f1422;
+}
