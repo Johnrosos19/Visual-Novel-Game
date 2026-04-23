@@ -30,7 +30,7 @@ body {
     aspect-ratio: 16 / 9;
     width: 100%;
     overflow: hidden;
-    border-bottom: 3px solid #d4af37;
+    border-bottom: 2px solid #d4af37;
 }
 
 #bgCanvas {
@@ -48,10 +48,10 @@ body {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    width: 200px;
-    height: 240px;
+    width: 180px;
+    height: 220px;
     z-index: 2;
-    background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(30,20,10,0.9));
+    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9));
     border-radius: 20px;
     border: 3px solid #d4af37;
     box-shadow: 0 10px 25px rgba(0,0,0,0.6);
@@ -60,16 +60,16 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 15px;
+    padding-top: 10px;
 }
 
 #portraitCanvas {
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    height: 140px;
     display: block;
     border-radius: 50%;
     border: 2px solid #d4af37;
-    margin-bottom: 10px;
+    margin-top: 5px;
 }
 
 .character-name-tag {
@@ -79,9 +79,9 @@ body {
     font-weight: bold;
     padding: 4px 12px;
     border-radius: 20px;
+    margin-top: 10px;
     text-align: center;
     font-family: monospace;
-    letter-spacing: 1px;
 }
 
 .dialogue-panel {
@@ -108,7 +108,7 @@ body {
     color: #f0f0f0;
     font-weight: 500;
     margin-bottom: 1.6rem;
-    min-height: 4rem;
+    min-height: 5rem;
 }
 
 .choices-area {
@@ -137,41 +137,6 @@ body {
     color: black;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(212,175,55,0.3);
-}
-
-.progress-bar-container {
-    margin: 1rem 0 0.5rem 0;
-}
-
-.progress-label {
-    font-size: 0.7rem;
-    color: #d4af37;
-    margin-bottom: 4px;
-    letter-spacing: 2px;
-    font-weight: bold;
-}
-
-.progress-bar {
-    width: 100%;
-    height: 10px;
-    background: #2a2418;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #d4af37, #ffd700);
-    border-radius: 10px;
-    transition: width 0.3s ease;
-}
-
-.progress-stats {
-    font-size: 0.65rem;
-    color: #aaa;
-    margin-top: 5px;
-    text-align: right;
 }
 
 .game-controls {
@@ -245,11 +210,10 @@ footer {
 
 @media (max-width: 800px) {
     .character-portrait-frame {
-        width: 130px;
-        height: 160px;
+        width: 120px;
+        height: 150px;
         bottom: 10px;
         left: 10px;
-        padding-top: 8px;
     }
     #portraitCanvas {
         width: 90px;

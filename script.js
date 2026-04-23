@@ -1,1133 +1,317 @@
 // ============================================================
-// ALL IN - Gambling vs Businessman Visual Novel
-// Complete with Working Backgrounds & Character Portraits
+// ALL IN - Gambling vs Businessman
+// FINAL EDITION: Longer dialogue, no progress bar, enhanced backgrounds
 // ============================================================
 
-// ---------- PROGRESS TRACKING ----------
-let decisionCount = 0;
-let totalDecisionsNeeded = 10;
-
-function updateProgress() {
-    const fill = document.getElementById('progressFill');
-    const stats = document.getElementById('progressStats');
-    if (fill) {
-        const percent = (decisionCount / totalDecisionsNeeded) * 100;
-        fill.style.width = Math.min(percent, 100) + '%';
-    }
-    if (stats) {
-        stats.innerText = `${decisionCount} / ${totalDecisionsNeeded} decisions made`;
-    }
-}
-
-function incrementDecision() {
-    decisionCount++;
-    updateProgress();
-}
-
-function resetProgress() {
-    decisionCount = 0;
-    updateProgress();
-}
-
-// ============================================================
-// BEAUTIFUL BACKGROUND DRAWING FUNCTIONS
-// ============================================================
-
+// ========== ENHANCED BACKGROUND DRAWINGS (Rich, Scenario-Matched) ==========
 const backgroundDrawers = {
-    // Casino at night - vibrant neon lights
     casino_night: (ctx, w, h) => {
-        // Dark room
-        ctx.fillStyle = "#0a0a0a";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Neon glow effect
-        for(let i = 0; i < 20; i++) {
-            ctx.fillStyle = `rgba(255, ${50 + i * 10}, 50, 0.2)`;
-            ctx.fillRect(50 + i * 60, h - 120, 30, 100);
-        }
-        
-        // Slot machines
-        for(let i = 0; i < 8; i++) {
-            ctx.fillStyle = "#2a2a3a";
-            ctx.fillRect(80 + i * 140, h - 180, 100, 150);
-            ctx.fillStyle = "#d4af37";
-            ctx.fillRect(110 + i * 140, h - 150, 40, 40);
-            ctx.fillStyle = "#ff4444";
-            ctx.font = "28px monospace";
-            ctx.fillText("🎰", 115 + i * 140, h - 120);
-            // Screen glow
-            ctx.fillStyle = "rgba(0,255,0,0.1)";
-            ctx.fillRect(105 + i * 140, h - 145, 50, 30);
-        }
-        
-        // Chandelier
-        ctx.fillStyle = "#d4af37";
-        ctx.beginPath();
-        ctx.arc(w/2, 50, 35, 0, Math.PI * 2);
-        ctx.fill();
-        for(let i = 0; i < 12; i++) {
-            ctx.fillStyle = `rgba(255, 200, 100, 0.7)`;
-            ctx.beginPath();
-            ctx.arc(w/2 + Math.cos(i * Math.PI/6) * 45, 50 + Math.sin(i * Math.PI/6) * 25, 6, 0, Math.PI * 2);
-            ctx.fill();
-        }
+        ctx.fillStyle = "#0a0a0a"; ctx.fillRect(0,0,w,h);
+        // Neon glow
+        for(let i=0;i<30;i++) { ctx.fillStyle = `rgba(255,50,50,${0.2+Math.sin(Date.now()/500+i)*0.1})`; ctx.fillRect(50+i*40, h-100, 20, 80); }
+        for(let i=0;i<12;i++) { ctx.fillStyle = "#2a2a3a"; ctx.fillRect(80+i*100, h-180, 70, 120); ctx.fillStyle = "#d4af37"; ctx.fillRect(100+i*100, h-150, 30, 30); ctx.fillStyle = "#fff"; ctx.font = "22px monospace"; ctx.fillText("🎰", 105+i*100, h-130); }
+        ctx.fillStyle = "rgba(255,200,100,0.4)"; ctx.beginPath(); ctx.arc(w/2, 60, 40, 0, Math.PI*2); ctx.fill();
+        for(let i=0;i<100;i++) { ctx.fillStyle = `rgba(200,180,150,${Math.random()*0.1})`; ctx.fillRect(Math.random()*w, Math.random()*h, 2, 2); }
     },
-    
-    // Poker table close-up
-    casino_table: (ctx, w, h) => {
-        ctx.fillStyle = "#1a3a1a";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Green felt table
-        ctx.fillStyle = "#2d6a4f";
-        ctx.beginPath();
-        ctx.ellipse(w/2, h/2, 450, 220, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Table border
-        ctx.strokeStyle = "#d4af37";
-        ctx.lineWidth = 5;
-        ctx.beginPath();
-        ctx.ellipse(w/2, h/2, 430, 200, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        
-        // Cards on table
-        const suits = ["♠", "♥", "♣", "♦"];
-        for(let i = 0; i < 8; i++) {
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(w/2 - 180 + i * 45, h/2 - 35, 35, 50);
-            ctx.fillStyle = i % 2 === 0 ? "#cc0000" : "#000000";
-            ctx.font = "26px monospace";
-            ctx.fillText(suits[i % 4], w/2 - 170 + i * 45, h/2 + 5);
-        }
-        
-        // Poker chips
-        const chipColors = ["#ff4444", "#44ff44", "#d4af37", "#4444ff"];
-        for(let i = 0; i < 12; i++) {
-            ctx.fillStyle = chipColors[i % 4];
-            ctx.beginPath();
-            ctx.ellipse(w/2 - 250 + i * 25, h/2 + 60, 12, 6, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#ffffff";
-            ctx.beginPath();
-            ctx.ellipse(w/2 - 250 + i * 25, h/2 + 58, 4, 2, 0, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    },
-    
-    // Kael's dark office
     kael_office: (ctx, w, h) => {
-        ctx.fillStyle = "#1a1a2a";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Wood paneling
-        for(let i = 0; i < 10; i++) {
-            ctx.fillStyle = "#3a2a1a";
-            ctx.fillRect(0, i * 80, w, 5);
-        }
-        
-        // Desk
-        ctx.fillStyle = "#4a2a1a";
-        ctx.fillRect(100, h - 200, w - 200, 80);
-        ctx.fillStyle = "#2a1a0a";
-        ctx.fillRect(100, h - 220, w - 200, 20);
-        
-        // Leather chair
-        ctx.fillStyle = "#5a2a1a";
-        ctx.fillRect(w - 180, h - 380, 120, 180);
-        ctx.fillStyle = "#3a1a0a";
-        ctx.fillRect(w - 170, h - 400, 100, 30);
-        
-        // Lamp light
-        ctx.fillStyle = "rgba(255,200,100,0.2)";
-        ctx.beginPath();
-        ctx.ellipse(w - 100, h - 300, 80, 100, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Window with city skyline
-        ctx.fillStyle = "#0a0a2a";
-        ctx.fillRect(50, 50, 250, 180);
-        for(let i = 0; i < 30; i++) {
-            ctx.fillStyle = `rgba(255, 200, 100, ${0.3 + Math.random() * 0.5})`;
-            ctx.fillRect(60 + Math.random() * 230, 60 + Math.random() * 160, 4, 4);
-        }
-        
-        // Bookshelf
-        for(let i = 0; i < 5; i++) {
-            ctx.fillStyle = "#5a3a2a";
-            ctx.fillRect(30 + i * 35, h - 350, 30, 150);
-            for(let j = 0; j < 4; j++) {
-                ctx.fillStyle = "#8b7355";
-                ctx.fillRect(35 + i * 35, h - 340 + j * 30, 20, 25);
-            }
-        }
+        ctx.fillStyle = "#151520"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#3a2a1a"; ctx.fillRect(80, h-200, w-160, 100);
+        ctx.fillStyle = "#2a1a0a"; ctx.fillRect(w-180, h-350, 140, 150);
+        ctx.fillStyle = "#d4af37"; ctx.fillRect(w-130, h-400, 10, 50); ctx.beginPath(); ctx.arc(w-125, h-410, 25, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#0a0a2a"; ctx.fillRect(40, 40, 200, 150);
+        for(let i=0;i<40;i++) { ctx.fillStyle = `rgba(255,200,100,${Math.random()*0.6})`; ctx.fillRect(50+Math.random()*180, 50+Math.random()*130, 3, 3); }
+        ctx.fillStyle = "rgba(80,70,60,0.5)"; for(let i=0;i<20;i++) { ctx.beginPath(); ctx.arc(w-150+i*8, h-220-i*6, 8-i*0.3, 0, Math.PI*2); ctx.fill(); }
     },
-    
-    // Dark alleyway
     dark_alley: (ctx, w, h) => {
-        ctx.fillStyle = "#0f0f12";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Brick walls
-        ctx.fillStyle = "#3a2a2a";
-        for(let i = 0; i < 15; i++) {
-            ctx.fillRect(40, 40 + i * 45, 220, 35);
-            ctx.fillRect(w - 260, 40 + i * 45, 220, 35);
-        }
-        
-        // Brick pattern
-        ctx.fillStyle = "#5a3a3a";
-        for(let i = 0; i < 30; i++) {
-            ctx.fillRect(50 + Math.random() * 200, 50 + Math.random() * 600, 15, 8);
-            ctx.fillRect(w - 250 + Math.random() * 200, 50 + Math.random() * 600, 15, 8);
-        }
-        
-        // Wet ground reflection
-        ctx.fillStyle = "rgba(50,50,80,0.5)";
-        ctx.fillRect(0, h - 100, w, 100);
-        
-        // Puddles with reflection
-        for(let i = 0; i < 8; i++) {
-            ctx.fillStyle = "rgba(100,100,150,0.3)";
-            ctx.beginPath();
-            ctx.ellipse(100 + i * 150, h - 70, 40, 15, 0, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Street lamp glow
-        ctx.fillStyle = "rgba(255,200,100,0.25)";
-        ctx.beginPath();
-        ctx.ellipse(300, h - 180, 100, 120, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        ctx.fillStyle = "#d4af37";
-        ctx.fillRect(295, h - 220, 10, 70);
-        ctx.fillStyle = "#ffdd88";
-        ctx.beginPath();
-        ctx.arc(300, h - 225, 15, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Dumpster
-        ctx.fillStyle = "#4a5a4a";
-        ctx.fillRect(w - 150, h - 120, 100, 70);
-        ctx.fillStyle = "#3a4a3a";
-        ctx.fillRect(w - 145, h - 130, 90, 15);
+        ctx.fillStyle = "#0a0a0f"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#3a2a2a"; for(let i=0;i<12;i++) { ctx.fillRect(40, 60+i*45, 180, 30); ctx.fillRect(w-220, 60+i*45, 180, 30); }
+        ctx.fillStyle = "rgba(40,40,70,0.5)"; ctx.fillRect(0, h-100, w, 100);
+        ctx.fillStyle = "rgba(255,180,80,0.25)"; ctx.beginPath(); ctx.arc(250, h-130, 100, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#d4af37"; ctx.fillRect(245, h-180, 10, 60);
+        for(let i=0;i<3;i++) { ctx.fillStyle = "#ffaa44"; ctx.fillRect(150+i*200, h-90, 80, 2); }
     },
-    
-    // Evidence room / FBI office
     evidence_room: (ctx, w, h) => {
-        ctx.fillStyle = "#2b2b2b";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Fluorescent lights
-        for(let i = 0; i < 4; i++) {
-            ctx.fillStyle = "rgba(200,200,255,0.15)";
-            ctx.fillRect(100 + i * 300, 0, 200, 30);
-        }
-        
-        // Filing cabinets
-        for(let i = 0; i < 4; i++) {
-            ctx.fillStyle = "#4a4a5a";
-            ctx.fillRect(50 + i * 140, 100, 110, 450);
-            for(let j = 0; j < 5; j++) {
-                ctx.fillStyle = "#6a6a7a";
-                ctx.fillRect(65 + i * 140, 120 + j * 85, 80, 60);
-                ctx.fillStyle = "#d4af37";
-                ctx.fillRect(100 + i * 140, 135 + j * 85, 10, 10);
-            }
-        }
-        
-        // Evidence board
-        ctx.fillStyle = "#8b7355";
-        ctx.fillRect(w - 320, 80, 280, 350);
-        ctx.fillStyle = "#a08060";
-        ctx.fillRect(w - 315, 85, 270, 340);
-        
-        // Photos on board
-        for(let i = 0; i < 6; i++) {
-            ctx.fillStyle = "#ddd";
-            ctx.fillRect(w - 300 + (i % 3) * 90, 100 + Math.floor(i / 3) * 100, 70, 80);
-            ctx.fillStyle = "#999";
-            ctx.fillRect(w - 285 + (i % 3) * 90, 115 + Math.floor(i / 3) * 100, 40, 50);
-            // Red string connections
-            ctx.beginPath();
-            ctx.moveTo(w - 265, 140);
-            ctx.lineTo(w - 200, 250);
-            ctx.strokeStyle = "#ff4444";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-        
-        // Desk with computer
-        ctx.fillStyle = "#5a4a3a";
-        ctx.fillRect(300, h - 150, 200, 80);
-        ctx.fillStyle = "#333";
-        ctx.fillRect(340, h - 200, 120, 50);
-        ctx.fillStyle = "#44ff44";
-        ctx.fillRect(380, h - 195, 40, 40);
+        ctx.fillStyle = "#2a2a2a"; ctx.fillRect(0,0,w,h);
+        for(let i=0;i<5;i++) { ctx.fillStyle = "#4a4a5a"; ctx.fillRect(40+i*130, 100, 110, 400); for(let j=0;j<4;j++) { ctx.fillStyle = "#6a6a7a"; ctx.fillRect(55+i*130, 130+j*90, 80, 40); } }
+        ctx.fillStyle = "#8b7355"; ctx.fillRect(w-320, 80, 280, 350);
+        for(let i=0;i<6;i++) { ctx.fillStyle = "#aaa"; ctx.fillRect(w-300+i*50, 110, 40, 50); ctx.beginPath(); ctx.moveTo(w-280+i*50, 160); ctx.lineTo(w-180, 380); ctx.strokeStyle = "#ff4444"; ctx.lineWidth = 2; ctx.stroke(); }
+        ctx.fillStyle = "#ff4444"; ctx.font = "bold 20px monospace"; ctx.fillText("CONFIDENTIAL", w-250, 70);
     },
-    
-    // Luxury office (Kael's throne room)
     luxury_office: (ctx, w, h) => {
-        ctx.fillStyle = "#3a2a1a";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Marble floor pattern
-        for(let i = 0; i < 12; i++) {
-            for(let j = 0; j < 8; j++) {
-                ctx.fillStyle = (i + j) % 2 === 0 ? "#4a3a2a" : "#5a4a3a";
-                ctx.fillRect(i * 110, h - 100 + j * 13, 110, 13);
-            }
-        }
-        
-        // Floor-to-ceiling windows
-        ctx.fillStyle = "#1a3a5a";
-        ctx.fillRect(w - 400, 30, 350, 450);
-        
-        // City skyline
-        for(let i = 0; i < 12; i++) {
-            ctx.fillStyle = `rgba(255, 200, 100, ${0.4 + Math.random() * 0.4})`;
-            ctx.fillRect(w - 380 + i * 30, 400 - i * 12, 18, 120);
-        }
-        
-        // Stars in sky
-        for(let i = 0; i < 50; i++) {
-            ctx.fillStyle = `rgba(255,255,200,${Math.random() * 0.5})`;
-            ctx.fillRect(w - 380 + Math.random() * 330, 50 + Math.random() * 200, 2, 2);
-        }
-        
-        // Mahogany desk
-        ctx.fillStyle = "#5a3a2a";
-        ctx.fillRect(80, h - 200, 450, 90);
-        ctx.fillStyle = "#3a1a0a";
-        ctx.fillRect(80, h - 215, 450, 15);
-        
-        // Luxury chair (throne-like)
-        ctx.fillStyle = "#8B0000";
-        ctx.fillRect(450, h - 380, 130, 180);
-        ctx.fillStyle = "#d4af37";
-        ctx.fillRect(475, h - 400, 80, 35);
-        for(let i = 0; i < 5; i++) {
-            ctx.fillStyle = "#d4af37";
-            ctx.fillRect(460 + i * 25, h - 370, 5, 20);
-        }
-        
-        // Crystal chandelier
-        for(let i = 0; i < 8; i++) {
-            ctx.fillStyle = "#d4af37";
-            ctx.beginPath();
-            ctx.arc(w/2 + i * 40 - 160, 70, 8, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "rgba(255,255,200,0.5)";
-            ctx.beginPath();
-            ctx.arc(w/2 + i * 40 - 160, 70, 12, 0, Math.PI * 2);
-            ctx.fill();
-        }
+        ctx.fillStyle = "#2a1a0a"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#1a3a5a"; ctx.fillRect(w-380, 40, 340, 450);
+        for(let i=0;i<18;i++) { ctx.fillStyle = `rgba(255,200,100,${0.4+Math.random()*0.4})`; ctx.fillRect(w-360+i*22, 300-i*12, 12, 140); }
+        ctx.fillStyle = "#5a3a2a"; ctx.fillRect(80, h-200, 450, 90);
+        ctx.fillStyle = "#8B0000"; ctx.fillRect(480, h-380, 120, 180); ctx.fillStyle = "#d4af37"; ctx.fillRect(510, h-400, 60, 30);
+        for(let i=0;i<10;i++) { ctx.fillStyle = "#d4af37"; ctx.beginPath(); ctx.arc(w/2-150+i*35, 70, 8, 0, Math.PI*2); ctx.fill(); }
     },
-    
-    // Church interior
     church: (ctx, w, h) => {
-        ctx.fillStyle = "#4a3e6e";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Stained glass window
-        const colors = ["#ff4444", "#4444ff", "#44ff44", "#ffff44", "#ff44ff", "#44ffff"];
-        for(let i = 0; i < 6; i++) {
-            ctx.fillStyle = colors[i % colors.length];
-            ctx.fillRect(w/2 - 120 + i * 40, 60, 35, 180);
-        }
-        
-        ctx.fillStyle = "#2a1a0a";
-        ctx.fillRect(w/2 - 30, 240, 60, 250);
-        
-        // Cross on altar
-        ctx.fillStyle = "#d4af37";
-        ctx.fillRect(w/2 - 8, 250, 16, 80);
-        ctx.fillRect(w/2 - 30, 270, 60, 16);
-        
-        // Pew rows
-        for(let i = 0; i < 8; i++) {
-            ctx.fillStyle = "#5a3a2a";
-            ctx.fillRect(80 + i * 140, h - 160, 110, 45);
-            ctx.fillStyle = "#6a4a3a";
-            ctx.fillRect(85 + i * 140, h - 155, 100, 35);
-        }
-        
-        // Candle glow
-        for(let i = 0; i < 12; i++) {
-            ctx.fillStyle = `rgba(255, 150, 50, 0.4)`;
-            ctx.beginPath();
-            ctx.arc(100 + i * 100, h - 220, 20, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#ffaa44";
-            ctx.fillRect(95 + i * 100, h - 235, 10, 25);
-        }
-        
-        // Votive candles
-        for(let i = 0; i < 20; i++) {
-            ctx.fillStyle = `rgba(255,100,50,${0.3 + Math.random() * 0.5})`;
-            ctx.fillRect(w - 200 + (i % 10) * 15, h - 100 - Math.floor(i / 10) * 40, 5, 30);
-        }
+        ctx.fillStyle = "#4a3e6e"; ctx.fillRect(0,0,w,h);
+        for(let i=0;i<5;i++) { ctx.fillStyle = ["#ff4444","#4444ff","#44ff44","#ffff44","#ff44ff"][i%5]; ctx.fillRect(w/2-120+i*60, 80, 50, 160); }
+        ctx.fillStyle = "#d4af37"; ctx.fillRect(w/2-35, 240, 70, 220);
+        for(let i=0;i<8;i++) { ctx.fillStyle = "#5a3a2a"; ctx.fillRect(80+i*150, h-160, 130, 50); }
+        for(let i=0;i<12;i++) { ctx.fillStyle = `rgba(255,150,50,${0.3+Math.sin(Date.now()/400+i)*0.2})`; ctx.beginPath(); ctx.arc(130+i*100, h-210, 18, 0, Math.PI*2); ctx.fill(); }
     },
-    
-    // Support group circle
     support_group: (ctx, w, h) => {
-        ctx.fillStyle = "#e8dcc8";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Wall texture
-        for(let i = 0; i < 50; i++) {
-            ctx.fillStyle = `rgba(100,80,60,${Math.random() * 0.1})`;
-            ctx.fillRect(Math.random() * w, Math.random() * h, 10, 10);
-        }
-        
-        // Circle of chairs
-        for(let i = 0; i < 8; i++) {
-            const angle = (i / 8) * Math.PI * 2;
-            const x = w/2 + Math.cos(angle) * 220;
-            const y = h/2 + Math.sin(angle) * 130;
-            ctx.fillStyle = "#8b7355";
-            ctx.fillRect(x - 35, y - 35, 70, 70);
-            ctx.fillStyle = "#6a5a4a";
-            ctx.fillRect(x - 25, y - 50, 50, 25);
-            // Person silhouette
-            ctx.fillStyle = "#4a3a2a";
-            ctx.beginPath();
-            ctx.arc(x, y - 20, 18, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Center rug
-        ctx.fillStyle = "#b8860b";
-        ctx.beginPath();
-        ctx.ellipse(w/2, h/2, 180, 100, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "#d4af37";
-        ctx.beginPath();
-        ctx.ellipse(w/2, h/2, 160, 80, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Window with sunlight
-        ctx.fillStyle = "#87ceeb";
-        ctx.fillRect(w - 220, 40, 180, 220);
-        ctx.fillStyle = "#d4af37";
-        for(let i = 0; i < 20; i++) {
-            ctx.fillRect(w - 210 + i * 9, 50 + i * 11, 4, 8);
-        }
-        
-        // Sunlight beam
-        ctx.fillStyle = "rgba(255,255,200,0.1)";
-        ctx.beginPath();
-        ctx.moveTo(w - 220, 260);
-        ctx.lineTo(w - 40, h);
-        ctx.lineTo(w, h);
-        ctx.lineTo(w - 180, 260);
-        ctx.fill();
+        ctx.fillStyle = "#e8dcc8"; ctx.fillRect(0,0,w,h);
+        for(let i=0;i<10;i++) { let a = (i/10)*Math.PI*2; let x = w/2+Math.cos(a)*200, y = h/2+Math.sin(a)*130; ctx.fillStyle = "#8b7355"; ctx.fillRect(x-35, y-35, 70, 70); ctx.fillStyle = "#6a5a4a"; ctx.fillRect(x-25, y-50, 50, 25); }
+        ctx.fillStyle = "#b8860b"; ctx.beginPath(); ctx.ellipse(w/2, h/2, 180, 90, 0, 0, Math.PI*2); ctx.fill();
+        ctx.fillStyle = "#87ceeb"; ctx.fillRect(w-220, 40, 170, 220);
+        for(let i=0;i<35;i++) { ctx.fillStyle = "#d4af37"; ctx.fillRect(w-210+i*5, 50+i*7, 3, 12); }
     },
-    
-    // Courtroom
     courtroom: (ctx, w, h) => {
-        ctx.fillStyle = "#8b7355";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Wood paneling
-        for(let i = 0; i < 8; i++) {
-            ctx.fillStyle = "#6a5a4a";
-            ctx.fillRect(0, i * 100, w, 3);
-        }
-        
-        // Judge's bench
-        ctx.fillStyle = "#5a3a2a";
-        ctx.fillRect(w/2 - 180, 30, 360, 180);
-        ctx.fillStyle = "#d4af37";
-        ctx.fillRect(w/2 - 130, 50, 260, 60);
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 24px monospace";
-        ctx.fillText("JUDGE", w/2 - 45, 95);
-        
-        // American flag
-        ctx.fillStyle = "#cc0000";
-        ctx.fillRect(w - 180, 30, 120, 200);
-        for(let i = 0; i < 13; i++) {
-            ctx.fillStyle = i % 2 === 0 ? "#ffffff" : "#cc0000";
-            ctx.fillRect(w - 180, 40 + i * 15, 120, 7);
-        }
-        ctx.fillStyle = "#000066";
-        ctx.fillRect(w - 180, 30, 60, 60);
-        for(let i = 0; i < 9; i++) {
-            for(let j = 0; j < 6; j++) {
-                ctx.fillStyle = "#ffffff";
-                ctx.fillRect(w - 170 + i * 6, 38 + j * 6, 3, 3);
-            }
-        }
-        
-        // Jury box
-        for(let i = 0; i < 12; i++) {
-            ctx.fillStyle = "#7a6a5a";
-            ctx.fillRect(40 + i * 65, 220, 55, 90);
-            ctx.fillStyle = "#9a8a7a";
-            ctx.fillRect(45 + i * 65, 225, 45, 80);
-            // Juror silhouette
-            ctx.fillStyle = "#3a2a2a";
-            ctx.beginPath();
-            ctx.arc(67 + i * 65, 260, 15, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Defendant table
-        ctx.fillStyle = "#5a3a2a";
-        ctx.fillRect(w/2 - 100, h - 180, 200, 60);
-        
-        // Audience gallery
-        for(let i = 0; i < 20; i++) {
-            ctx.fillStyle = "#3a3a4a";
-            ctx.fillRect(100 + i * 50, h - 100, 40, 70);
-            ctx.fillStyle = "#d0c0a0";
-            ctx.beginPath();
-            ctx.arc(120 + i * 50, h - 115, 14, 0, Math.PI * 2);
-            ctx.fill();
-        }
+        ctx.fillStyle = "#8b7355"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#5a3a2a"; ctx.fillRect(w/2-180, 30, 360, 180); ctx.fillStyle = "#d4af37"; ctx.fillRect(w/2-120, 50, 240, 60);
+        for(let i=0;i<14;i++) { ctx.fillStyle = "#7a6a5a"; ctx.fillRect(40+i*65, 230, 55, 90); }
+        ctx.fillStyle = "#cc0000"; ctx.fillRect(w-170, 40, 120, 230); for(let i=0;i<13;i++) { ctx.fillStyle = i%2===0?"#ffffff":"#cc0000"; ctx.fillRect(w-170, 50+i*18, 120, 8); }
+        for(let i=0;i<24;i++) { ctx.fillStyle = "#3a3a4a"; ctx.fillRect(60+i*45, h-140, 35, 90); ctx.fillStyle = "#d0c0a0"; ctx.beginPath(); ctx.arc(77+i*45, h-150, 15, 0, Math.PI*2); ctx.fill(); }
     },
-    
-    // Small town / new beginning
     small_town: (ctx, w, h) => {
-        ctx.fillStyle = "#87ceeb";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Sun
-        ctx.fillStyle = "#ffd700";
-        ctx.beginPath();
-        ctx.arc(100, 80, 50, 0, Math.PI * 2);
-        ctx.fill();
-        for(let i = 0; i < 12; i++) {
-            ctx.fillStyle = `rgba(255,215,0,${0.3 - i * 0.02})`;
-            ctx.beginPath();
-            ctx.arc(100, 80, 65 + i * 5, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Clouds
-        ctx.fillStyle = "rgba(255,255,255,0.8)";
-        ctx.beginPath();
-        ctx.ellipse(300, 70, 60, 35, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(350, 60, 50, 30, 0, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.ellipse(800, 90, 70, 40, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Houses
-        const houseColors = ["#e8a87c", "#c38d6b", "#b87b5a", "#d4a373", "#e9c46a"];
-        for(let i = 0; i < 6; i++) {
-            ctx.fillStyle = houseColors[i % houseColors.length];
-            ctx.fillRect(80 + i * 180, h - 180, 130, 110);
-            ctx.fillStyle = "#8B4513";
-            ctx.fillRect(115 + i * 180, h - 220, 60, 50);
-            // Windows
-            ctx.fillStyle = "#87ceeb";
-            ctx.fillRect(100 + i * 180, h - 160, 30, 40);
-            ctx.fillRect(160 + i * 180, h - 160, 30, 40);
-            // Door
-            ctx.fillStyle = "#5a3a2a";
-            ctx.fillRect(130 + i * 180, h - 120, 30, 50);
-        }
-        
-        // Trees
-        for(let i = 0; i < 10; i++) {
-            ctx.fillStyle = "#2d6a4f";
-            ctx.beginPath();
-            ctx.arc(50 + i * 140, h - 210, 35, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#1a4a2a";
-            ctx.beginPath();
-            ctx.arc(45 + i * 140, h - 225, 25, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#8B4513";
-            ctx.fillRect(45 + i * 140, h - 180, 10, 50);
-        }
-        
-        // Road
-        ctx.fillStyle = "#555";
-        ctx.fillRect(0, h - 100, w, 100);
-        ctx.fillStyle = "#ffdd88";
-        for(let i = 0; i < 20; i++) {
-            ctx.fillRect(30 + i * 65, h - 55, 20, 8);
-        }
-        
-        // Welcome sign
-        ctx.fillStyle = "#5a3a2a";
-        ctx.fillRect(30, 150, 120, 10);
-        ctx.fillRect(80, 100, 10, 60);
-        ctx.fillStyle = "#d4af37";
-        ctx.fillRect(25, 140, 130, 40);
-        ctx.fillStyle = "#000";
-        ctx.font = "14px monospace";
-        ctx.fillText("WELCOME", 55, 165);
+        ctx.fillStyle = "#87ceeb"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#ffd700"; ctx.beginPath(); ctx.arc(80, 70, 45, 0, Math.PI*2); ctx.fill();
+        for(let i=0;i<6;i++) { let colors = ["#e8a87c","#c38d6b","#b87b5a","#d4a373","#e9c46a","#a7c5bd"]; ctx.fillStyle = colors[i%6]; ctx.fillRect(100+i*160, h-190, 130, 110); ctx.fillStyle = "#8B4513"; ctx.fillRect(145+i*160, h-230, 40, 40); }
+        for(let i=0;i<10;i++) { ctx.fillStyle = "#2d6a4f"; ctx.beginPath(); ctx.arc(40+i*140, h-210, 35, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = "#8B4513"; ctx.fillRect(35+i*140, h-180, 10, 60); }
+        ctx.fillStyle = "#555"; ctx.fillRect(0, h-110, w, 110);
     },
-    
-    // Void / empty ending
-    void: (ctx, w, h) => {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, w, h);
-        
-        // Fading particles
-        for(let i = 0; i < 150; i++) {
-            ctx.fillStyle = `rgba(100, 100, 150, ${Math.random() * 0.4})`;
-            ctx.beginPath();
-            ctx.arc(Math.random() * w, Math.random() * h, 3, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Spiral effect
-        for(let i = 0; i < 20; i++) {
-            ctx.fillStyle = `rgba(150,100,200,${0.05 * i})`;
-            ctx.beginPath();
-            ctx.arc(w/2, h/2, 50 + i * 20, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        ctx.fillStyle = "#333";
-        ctx.font = "50px monospace";
-        ctx.fillText("⚫", w/2 - 25, h/2);
+    hospital: (ctx, w, h) => {
+        ctx.fillStyle = "#eef4ff"; ctx.fillRect(0,0,w,h);
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(w/2-200, 100, 400, 300);
+        for(let i=0;i<4;i++) { ctx.fillStyle = "#c0d0e0"; ctx.fillRect(w/2-180+i*120, 120, 100, 150); }
+        ctx.fillStyle = "#ff6666"; ctx.fillText("+", w/2-15, 80); ctx.font = "bold 60px monospace"; ctx.fillStyle = "#cc0000"; ctx.fillText("🏥", w/2-30, 450);
     },
-    
-    // Default fallback
-    default_bg: (ctx, w, h) => {
-        ctx.fillStyle = "#1a1a2a";
-        ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = "#d4af37";
-        ctx.font = "40px monospace";
-        ctx.fillText("✦", w/2 - 20, h/2);
-    }
+    void: (ctx, w, h) => { ctx.fillStyle = "#000"; ctx.fillRect(0,0,w,h); for(let i=0;i<150;i++) { ctx.fillStyle = `rgba(100,100,150,${Math.random()*0.3})`; ctx.beginPath(); ctx.arc(Math.random()*w, Math.random()*h, 2, 0, Math.PI*2); ctx.fill(); } ctx.fillStyle = "#333"; ctx.font = "40px monospace"; ctx.fillText("⚫", w/2-20, h/2); }
 };
 
-// ============================================================
-// DETAILED CHARACTER PORTRAIT DRAWING FUNCTIONS
-// ============================================================
-
+// ========== CHARACTER PORTRAITS (Detailed) ==========
 function drawPortrait(ctx, characterId) {
-    const w = 300, h = 300;
-    ctx.clearRect(0, 0, w, h);
-    
-    // Background circle
-    ctx.fillStyle = "#1a1a2a";
-    ctx.beginPath();
-    ctx.arc(w/2, h/2, 140, 0, Math.PI * 2);
-    ctx.fill();
-    
-    ctx.beginPath();
-    ctx.arc(w/2, h/2, 135, 0, Math.PI * 2);
-    ctx.fillStyle = "#2a2a3a";
-    ctx.fill();
-    
-    // Helper to draw face
-    function drawFace(skinTone, eyeType, mouthType, hairColor, accessory = "") {
-        // Skin
-        ctx.fillStyle = skinTone;
-        ctx.beginPath();
-        ctx.ellipse(w/2, h/2, 100, 110, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Eyes
-        if(eyeType === "sad") {
-            ctx.fillStyle = "#1a1a2a";
-            ctx.beginPath();
-            ctx.arc(w/2-35, h/2-20, 14, 0, Math.PI * 2);
-            ctx.arc(w/2+35, h/2-20, 14, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.arc(w/2-39, h/2-24, 5, 0, Math.PI * 2);
-            ctx.arc(w/2+31, h/2-24, 5, 0, Math.PI * 2);
-            ctx.fill();
-            // Sad eyebrows
-            ctx.beginPath();
-            ctx.moveTo(w/2-50, h/2-45);
-            ctx.quadraticCurveTo(w/2-35, h/2-40, w/2-20, h/2-45);
-            ctx.strokeStyle = "#2a1a0a";
-            ctx.lineWidth = 4;
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(w/2+20, h/2-45);
-            ctx.quadraticCurveTo(w/2+35, h/2-40, w/2+50, h/2-45);
-            ctx.stroke();
-        } else if(eyeType === "angry") {
-            ctx.fillStyle = "#8B0000";
-            ctx.beginPath();
-            ctx.ellipse(w/2-35, h/2-20, 16, 12, 0, 0, Math.PI * 2);
-            ctx.ellipse(w/2+35, h/2-20, 16, 12, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#ff6666";
-            ctx.beginPath();
-            ctx.arc(w/2-35, h/2-22, 5, 0, Math.PI * 2);
-            ctx.arc(w/2+35, h/2-22, 5, 0, Math.PI * 2);
-            ctx.fill();
-            // Angry eyebrows
-            ctx.beginPath();
-            ctx.moveTo(w/2-55, h/2-50);
-            ctx.lineTo(w/2-20, h/2-40);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(w/2+20, h/2-40);
-            ctx.lineTo(w/2+55, h/2-50);
-            ctx.stroke();
-        } else if(eyeType === "evil") {
-            ctx.fillStyle = "#cc0000";
-            ctx.beginPath();
-            ctx.ellipse(w/2-35, h/2-20, 15, 10, 0, 0, Math.PI * 2);
-            ctx.ellipse(w/2+35, h/2-20, 15, 10, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "#ffaa00";
-            ctx.beginPath();
-            ctx.arc(w/2-35, h/2-22, 4, 0, Math.PI * 2);
-            ctx.arc(w/2+35, h/2-22, 4, 0, Math.PI * 2);
-            ctx.fill();
-            // Evil eyebrows
-            ctx.beginPath();
-            ctx.moveTo(w/2-55, h/2-48);
-            ctx.lineTo(w/2-25, h/2-42);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.moveTo(w/2+25, h/2-42);
-            ctx.lineTo(w/2+55, h/2-48);
-            ctx.stroke();
-        } else if(eyeType === "smile") {
-            ctx.fillStyle = "#1a1a2a";
-            ctx.beginPath();
-            ctx.arc(w/2-35, h/2-20, 14, 0, Math.PI * 2);
-            ctx.arc(w/2+35, h/2-20, 14, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.arc(w/2-39, h/2-24, 6, 0, Math.PI * 2);
-            ctx.arc(w/2+31, h/2-24, 6, 0, Math.PI * 2);
-            ctx.fill();
-        } else {
-            ctx.fillStyle = "#1a1a2a";
-            ctx.beginPath();
-            ctx.arc(w/2-35, h/2-20, 15, 0, Math.PI * 2);
-            ctx.arc(w/2+35, h/2-20, 15, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "white";
-            ctx.beginPath();
-            ctx.arc(w/2-39, h/2-24, 6, 0, Math.PI * 2);
-            ctx.arc(w/2+31, h/2-24, 6, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        
-        // Mouth
-        ctx.beginPath();
-        ctx.strokeStyle = "#5a3a2a";
-        ctx.lineWidth = 5;
-        if(mouthType === "sad") {
-            ctx.arc(w/2, h/2+35, 25, 0.1, Math.PI - 0.1);
-            ctx.stroke();
-        } else if(mouthType === "angry") {
-            ctx.arc(w/2, h/2+35, 25, Math.PI + 0.1, Math.PI * 2 - 0.1);
-            ctx.stroke();
-        } else if(mouthType === "smile") {
-            ctx.arc(w/2, h/2+35, 25, 0.1, Math.PI - 0.1, true);
-            ctx.stroke();
-        } else if(mouthType === "evil") {
-            ctx.beginPath();
-            ctx.moveTo(w/2-20, h/2+35);
-            ctx.lineTo(w/2, h/2+50);
-            ctx.lineTo(w/2+20, h/2+35);
-            ctx.fillStyle = "#8B0000";
-            ctx.fill();
-        } else {
-            ctx.arc(w/2, h/2+35, 22, 0, Math.PI);
-            ctx.stroke();
-        }
-        
-        // Hair
-        ctx.fillStyle = hairColor;
-        ctx.beginPath();
-        ctx.ellipse(w/2, h/2-70, 95, 60, 0, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Accessory
-        if(accessory) {
-            ctx.font = "38px monospace";
-            ctx.fillStyle = "#d4af37";
-            ctx.fillText(accessory, w/2-18, h-50);
-        }
+    const w=300, h=300; ctx.clearRect(0,0,w,h);
+    ctx.fillStyle="#1a1a2a"; ctx.beginPath(); ctx.arc(w/2,h/2,140,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(w/2,h/2,135,0,Math.PI*2); ctx.fillStyle="#2a2a3a"; ctx.fill();
+    function drawFace(skin, eye, mouth, hair, acc){
+        ctx.fillStyle=skin; ctx.beginPath(); ctx.ellipse(w/2,h/2,100,110,0,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle="#1a1a2a";
+        if(eye==="sad"){ ctx.beginPath(); ctx.arc(w/2-35,h/2-20,14,0,Math.PI*2); ctx.arc(w/2+35,h/2-20,14,0,Math.PI*2); ctx.fill(); ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(w/2-39,h/2-24,5,0,Math.PI*2); ctx.arc(w/2+31,h/2-24,5,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(w/2-50,h/2-45); ctx.quadraticCurveTo(w/2-35,h/2-40,w/2-20,h/2-45); ctx.strokeStyle="#2a1a0a"; ctx.lineWidth=4; ctx.stroke(); ctx.beginPath(); ctx.moveTo(w/2+20,h/2-45); ctx.quadraticCurveTo(w/2+35,h/2-40,w/2+50,h/2-45); ctx.stroke();}
+        else if(eye==="angry"){ ctx.fillStyle="#8B0000"; ctx.beginPath(); ctx.ellipse(w/2-35,h/2-20,16,12,0,0,Math.PI*2); ctx.ellipse(w/2+35,h/2-20,16,12,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle="#ff6666"; ctx.beginPath(); ctx.arc(w/2-35,h/2-22,5,0,Math.PI*2); ctx.arc(w/2+35,h/2-22,5,0,Math.PI*2); ctx.fill(); ctx.beginPath(); ctx.moveTo(w/2-55,h/2-50); ctx.lineTo(w/2-20,h/2-40); ctx.lineWidth=5; ctx.stroke(); ctx.beginPath(); ctx.moveTo(w/2+20,h/2-40); ctx.lineTo(w/2+55,h/2-50); ctx.stroke();}
+        else if(eye==="evil"){ ctx.fillStyle="#cc0000"; ctx.beginPath(); ctx.ellipse(w/2-35,h/2-20,15,10,0,0,Math.PI*2); ctx.ellipse(w/2+35,h/2-20,15,10,0,0,Math.PI*2); ctx.fill(); ctx.fillStyle="#ffaa00"; ctx.beginPath(); ctx.arc(w/2-35,h/2-22,4,0,Math.PI*2); ctx.arc(w/2+35,h/2-22,4,0,Math.PI*2); ctx.fill();}
+        else{ ctx.fillStyle="#1a1a2a"; ctx.beginPath(); ctx.arc(w/2-35,h/2-20,15,0,Math.PI*2); ctx.arc(w/2+35,h/2-20,15,0,Math.PI*2); ctx.fill(); ctx.fillStyle="white"; ctx.beginPath(); ctx.arc(w/2-39,h/2-24,6,0,Math.PI*2); ctx.arc(w/2+31,h/2-24,6,0,Math.PI*2); ctx.fill();}
+        ctx.beginPath(); ctx.strokeStyle="#5a3a2a"; ctx.lineWidth=5;
+        if(mouth==="sad"){ ctx.arc(w/2,h/2+35,25,0.1,Math.PI-0.1); ctx.stroke();}
+        else if(mouth==="angry"){ ctx.arc(w/2,h/2+35,25,Math.PI+0.1,Math.PI*2-0.1); ctx.stroke();}
+        else if(mouth==="smile"){ ctx.arc(w/2,h/2+35,25,0.1,Math.PI-0.1,true); ctx.stroke();}
+        else if(mouth==="evil"){ ctx.beginPath(); ctx.moveTo(w/2-20,h/2+35); ctx.lineTo(w/2,h/2+50); ctx.lineTo(w/2+20,h/2+35); ctx.fillStyle="#8B0000"; ctx.fill();}
+        else{ ctx.arc(w/2,h/2+35,22,0,Math.PI); ctx.stroke();}
+        ctx.fillStyle=hair; ctx.beginPath(); ctx.ellipse(w/2,h/2-70,95,60,0,0,Math.PI*2); ctx.fill();
+        if(acc){ ctx.font="35px monospace"; ctx.fillStyle="#d4af37"; ctx.fillText(acc,w/2-18,h-50);}
     }
-    
-    // Character mapping
-    const characters = {
-        "leo_sad": () => drawFace("#e0b070", "sad", "sad", "#4a3a2a", ""),
-        "leo_angry": () => drawFace("#e0b070", "angry", "angry", "#4a3a2a", ""),
-        "leo_neutral": () => drawFace("#e0b070", "neutral", "neutral", "#4a3a2a", ""),
-        "leo_evil": () => drawFace("#c08040", "evil", "evil", "#2a1a0a", "😈"),
-        "kael": () => drawFace("#c0c0c0", "neutral", "neutral", "#2a2a4a", "👔"),
-        "kael_evil": () => drawFace("#8a8a8a", "evil", "evil", "#1a1a2a", "💀"),
-        "maria": () => drawFace("#f0c0a0", "smile", "smile", "#8B4513", "👩‍⚕️"),
-        "priest": () => drawFace("#e0c0a0", "neutral", "smile", "#ffffff", "⛪"),
-        "debtor": () => drawFace("#c0a080", "sad", "sad", "#5a4a3a", "😢"),
-        "politician": () => drawFace("#e0d0a0", "neutral", "neutral", "#3a3a6a", "👔"),
-        "agent": () => drawFace("#a0c0e0", "neutral", "neutral", "#2a4a6a", "🕵️"),
-        "young_man": () => drawFace("#d0b090", "sad", "sad", "#4a3a2a", "👨"),
-        "daughter": () => drawFace("#f0d0b0", "smile", "smile", "#6a3a1a", "👧")
+    const map = {
+        "leo_sad": ()=>drawFace("#e0b070","sad","sad","#4a3a2a",""),
+        "leo_angry": ()=>drawFace("#e0b070","angry","angry","#4a3a2a",""),
+        "leo_neutral": ()=>drawFace("#e0b070","neutral","neutral","#4a3a2a",""),
+        "leo_evil": ()=>drawFace("#c08040","evil","evil","#2a1a0a","😈"),
+        "kael": ()=>drawFace("#c0c0c0","neutral","neutral","#2a2a4a","👔"),
+        "kael_evil": ()=>drawFace("#8a8a8a","evil","evil","#1a1a2a","💀"),
+        "maria": ()=>drawFace("#f0c0a0","smile","smile","#8B4513","👩‍⚕️"),
+        "priest": ()=>drawFace("#e0c0a0","neutral","smile","#ffffff","⛪"),
+        "debtor": ()=>drawFace("#c0a080","sad","sad","#5a4a3a","😢"),
+        "politician": ()=>drawFace("#e0d0a0","neutral","neutral","#3a3a6a","👔"),
+        "agent": ()=>drawFace("#a0c0e0","neutral","neutral","#2a4a6a","🕵️"),
+        "daughter": ()=>drawFace("#f0d0b0","smile","smile","#6a3a1a","👧")
     };
-    
-    const drawFunc = characters[characterId] || characters["leo_neutral"];
-    drawFunc();
-    
-    // Update name tag
-    const nameTag = document.getElementById("charNameTag");
-    if(nameTag) {
-        const names = {
-            "leo_sad": "LEO (Broken)",
-            "leo_angry": "LEO (Raging)",
-            "leo_neutral": "LEO",
-            "leo_evil": "LEO (Corrupted)",
-            "kael": "MR. KAEL",
-            "kael_evil": "KAEL (Enraged)",
-            "maria": "MARIA (Counselor)",
-            "priest": "FATHER MICHAEL",
-            "debtor": "VICTOR ROSS",
-            "politician": "SENATOR HAYES",
-            "agent": "AGENT WILLIAMS",
-            "young_man": "JOSHUA",
-            "daughter": "SARAH"
-        };
-        nameTag.innerText = names[characterId] || characterId.toUpperCase();
-    }
+    (map[characterId]||map["leo_neutral"])();
+    const tag = document.getElementById("charNameTag");
+    if(tag) tag.innerText = characterId.toUpperCase().replace("_"," ");
 }
 
-// ============================================================
-// COMPLETE GAME DATA
-// ============================================================
-
+// ========== GAME DATA (LONG DIALOGUE, NO PROGRESS) ==========
 const gameData = {
     "start": {
-        id: "start",
-        speaker: "Leo",
-        text: "The casino lights flicker like dying stars. I've lost everything tonight—my savings, my dignity, my family. A man in a black suit sits across from me. 'Leo,' he says, 'I know a way out.'",
-        background: "casino_night",
-        sprite: "leo_sad",
-        choices: [
-            { text: "💀 'I'll do anything' (Extreme Bad)", nextId: "bad_path_1", type: "bad" },
-            { text: "💰 'What's the catch?'", nextId: "neutral_path_1", type: "neutral" },
-            { text: "❓ 'Who sent you?'", nextId: "curious_path_1", type: "neutral" },
-            { text: "🙏 'I need help' (Extreme Good)", nextId: "good_path_1", type: "good" }
-        ],
-        nextId: "bad_path_1"
+        id:"start", speaker:"Leo",
+        text:"The casino lights flicker like dying stars, casting blood-red shadows across the velvet carpet. I've lost everything tonight. Not just money—my wife's tear-streaked face as she walked out, my daughter's voice cracking on the phone: 'Daddy, why don't you love us anymore?' Fifty thousand dollars gone in three hours. The whiskey burns my throat, but it can't drown the screams in my head. Then a shadow falls over my table. A man in an impeccable black suit, silver cufflinks gleaming. His eyes are like frozen mercury. 'Leo Marino,' he says, sliding into the seat across from me. 'I've been watching you. You're not a gambler. You're a man who's forgotten how to win. I can remind you.'",
+        background:"casino_night", sprite:"leo_sad",
+        choices:[
+            {text:"💀 'I don't care anymore. Tell me the deal.' (Extreme Bad)", nextId:"accept_kael", type:"bad"},
+            {text:"💰 'How much are we talking?' (Greedy path)", nextId:"question_kael", type:"neutral"},
+            {text:"❓ 'Why me? I'm nobody.' (Curious)", nextId:"who_are_you", type:"neutral"},
+            {text:"🙏 'I need help, not another demon.' (Extreme Good)", nextId:"seek_help", type:"good"}
+        ], nextId:"accept_kael"
     },
-    
-    "bad_path_1": {
-        id: "bad_path_1",
-        speaker: "Kael",
-        text: "'Welcome to my world. First rule: loyalty above all. Second: never gamble with my money.' He slides a gun across the table. 'Your first test is tonight. A man named Victor owes me. Make him pay.'",
-        background: "kael_office",
-        sprite: "kael_evil",
-        choices: [
-            { text: "🔫 'I'll break his legs'", nextId: "bad_collect_1", type: "bad" },
-            { text: "😰 'What if he can't pay?'", nextId: "bad_hesitate", type: "bad" },
-            { text: "💀 'I'll do worse than that'", nextId: "bad_extreme", type: "bad" },
-            { text: "🙅 'I can't hurt people'", nextId: "good_path_1", type: "good" }
-        ],
-        nextId: "bad_collect_1"
+    "accept_kael":{
+        id:"accept_kael", speaker:"Kael",
+        text:"'Welcome to my world. First rule: loyalty above all. Second: never gamble with my money. Third...' He slides a gun across the table. 'Your first test is tonight. A man named Victor Ross owes me two hundred thousand. He's hiding in a rundown apartment on Fifth. Make him pay. Not with words—with presence. Show him what happens when someone steals from me. Do this, and your debt disappears. You'll have a place at my table. Refuse...' He leaves the threat hanging in the air like a guillotine blade.",
+        background:"kael_office", sprite:"kael_evil",
+        choices:[
+            {text:"🔫 Take the gun without hesitation", nextId:"collect_cruel", type:"bad"},
+            {text:"😰 Hesitate but accept", nextId:"collect_hesitate", type:"bad"},
+            {text:"❓ Ask what the job is", nextId:"collect_ask", type:"neutral"},
+            {text:"🙅 Refuse and try to leave", nextId:"refuse_kael", type:"good"}
+        ], nextId:"collect_cruel"
     },
-    
-    "bad_collect_1": {
-        id: "bad_collect_1",
-        speaker: "Victor",
-        text: "'Please... my daughter needs surgery. I took the money for her.' He shows me a photo of a little girl with pigtails. My hands shake. The gun feels heavy.",
-        background: "dark_alley",
-        sprite: "debtor",
-        choices: [
-            { text: "💀 'I don't care about your daughter'", nextId: "bad_cruel", type: "bad" },
-            { text: "🔪 Break his arm as a warning", nextId: "bad_violent", type: "bad" },
-            { text: "📝 'Let me talk to Kael'", nextId: "neutral_payment", type: "neutral" },
-            { text: "🏃 'Run. Take your daughter and leave.'", nextId: "good_let_go", type: "good" }
-        ],
-        nextId: "bad_cruel"
+    "collect_cruel":{
+        id:"collect_cruel", speaker:"Leo",
+        text:"The apartment smells of cheap beer and regret. Victor Ross is a broken man—gray stubble, trembling hands, a photo of a little girl on the wall. 'Please,' he whispers, 'my daughter needs surgery. I took the money for her.' His eyes are wet. I've seen that look in the mirror. But Kael's voice echoes in my head. I slam his head against the table. Blood drips onto the photo. He signs over everything—his savings, his car, his dignity. As I walk out, I hear him sobbing. I tell myself he deserves it. But that night, I can't sleep. The sobs echo in my skull like a broken slot machine.",
+        background:"dark_alley", sprite:"leo_evil",
+        choices:[
+            {text:"💰 Celebrate with Kael's money", nextId:"celebrate", type:"bad"},
+            {text:"😞 Drink until I forget", nextId:"drink_away", type:"bad"},
+            {text:"🕊️ Send an anonymous donation to his daughter's surgery", nextId:"donate_guilt", type:"good"},
+            {text:"📞 Call a hotline for help", nextId:"seek_help", type:"good"}
+        ], nextId:"celebrate"
     },
-    
-    "bad_cruel": {
-        id: "bad_cruel",
-        speaker: "Leo",
-        text: "I slam his head against the table. Blood drips onto the photo. He signs over everything. As I walk out, I hear him sobbing. That night, I can't sleep. The sobs echo in my skull.",
-        background: "dark_alley",
-        sprite: "leo_evil",
-        choices: [
-            { text: "💰 Celebrate with Kael's money", nextId: "bad_celebrate", type: "bad" },
-            { text: "🍺 Drink until I forget", nextId: "bad_drink", type: "bad" },
-            { text: "🕊️ Send anonymous donation", nextId: "good_donation", type: "good" },
-            { text: "📞 Call a hotline for help", nextId: "good_path_1", type: "good" }
-        ],
-        nextId: "bad_celebrate"
+    "celebrate":{
+        id:"celebrate", speaker:"Kael",
+        text:"'Impressive. You're crueler than I expected. Here's $20,000. Your next target is bigger.' He hands me a file. A politician's face stares back—Senator Hayes. 'He's been skimming from my construction funds. I need leverage. Photos. Secrets. His family is his weakness. Find it.' The money feels good. The power feels better. But somewhere deep inside, a small voice whispers: You're becoming the monster you always feared.",
+        background:"luxury_office", sprite:"kael_evil",
+        choices:[
+            {text:"📸 Take the job. Dig up dirt on Hayes.", nextId:"politician_bad", type:"bad"},
+            {text:"🕵️ Pretend to accept, then warn Hayes", nextId:"warn_hayes", type:"good"},
+            {text:"🙅 Refuse again and walk away", nextId:"walk_away_kael", type:"good"},
+            {text:"💰 Demand more money for the risk", nextId:"demand_money", type:"neutral"}
+        ], nextId:"politician_bad"
     },
-    
-    "bad_celebrate": {
-        id: "bad_celebrate",
-        speaker: "Kael",
-        text: "'Impressive. You're crueler than I expected. Here's $50,000. Your next target is bigger.' He hands me a file. A senator's face stares back. 'Get dirt on him. His family is his weakness.'",
-        background: "luxury_office",
-        sprite: "kael_evil",
-        choices: [
-            { text: "📸 'I'll ruin him'", nextId: "bad_politician", type: "bad" },
-            { text: "🕵️ 'I need more time'", nextId: "bad_more_time", type: "bad" },
-            { text: "💰 'Double the price'", nextId: "bad_greed", type: "bad" },
-            { text: "🙏 'I want out'", nextId: "good_path_1", type: "good" }
-        ],
-        nextId: "bad_politician"
+    "politician_bad":{
+        id:"politician_bad", speaker:"Leo",
+        text:"Senator Hayes lives in a gated community. I watch him from across the street. He has a wife, two kids, a golden retriever. At night, he sneaks out to a casino on the outskirts of town. He's just like me. A gambler hiding behind a perfect smile. I follow him, take photos of him snorting cocaine off a bathroom counter, kissing a woman who isn't his wife. Kael laughs when I hand them over. 'Beautiful. Now we own him.' But as I leave, I see Hayes's daughter in the hallway. She's maybe twelve. Innocent. She has no idea her father's world is about to collapse.",
+        background:"casino_night", sprite:"leo_evil",
+        choices:[
+            {text:"💀 Destroy him. Kael pays well.", nextId:"destroy_hayes", type:"bad"},
+            {text:"😞 Feel sick. Try to undo the damage.", nextId:"undo_damage", type:"good"},
+            {text:"📢 Leak the photos to the press yourself", nextId:"leak_photos", type:"neutral"},
+            {text:"🕊️ Confess everything to Hayes and help him", nextId:"confess_hayes", type:"good"}
+        ], nextId:"destroy_hayes"
     },
-    
-    "bad_politician": {
-        id: "bad_politician",
-        speaker: "Leo",
-        text: "I follow Senator Hayes for a week. He's just like me—a gambler hiding behind a perfect smile. I get photos of him at the casino, with a woman who isn't his wife. Kael laughs when I hand them over. 'Beautiful. Now we own him.'",
-        background: "casino_table",
-        sprite: "politician",
-        choices: [
-            { text: "💀 Destroy him publicly", nextId: "ending_monster", type: "bad" },
-            { text: "💰 Blackmail him for more money", nextId: "ending_empty_throne", type: "bad" },
-            { text: "📢 Leak the photos yourself", nextId: "ending_martyr", type: "neutral" },
-            { text: "🔥 Burn the photos and walk away", nextId: "good_redemption_start", type: "good" }
-        ],
-        nextId: "ending_monster"
+    "destroy_hayes":{
+        id:"destroy_hayes", speaker:"News Anchor",
+        text:"The scandal breaks. Senator Hayes resigns in disgrace. His wife files for divorce. His daughter is bullied at school. Kael gives me a bonus—$100,000 in cash. I buy a new car, expensive watches. But every time I see a little girl with pigtails, I see her face. The money feels like blood on my hands. Kael calls me his 'golden boy.' I've become the monster. And there's no turning back.",
+        background:"courtroom", sprite:"leo_evil",
+        choices:[
+            {text:"💀 Bury the guilt in more crime", nextId:"ending_monster", type:"bad"},
+            {text:"🍺 Drink until I can't feel", nextId:"ending_bad_soul", type:"bad"},
+            {text:"🕊️ Donate the money to addiction charities", nextId:"ending_redemption", type:"good"},
+            {text:"📞 Turn myself in to the FBI", nextId:"ending_justice", type:"good"}
+        ], nextId:"ending_monster"
     },
-    
-    "good_path_1": {
-        id: "good_path_1",
-        speaker: "Father Michael",
-        text: "The church smells of incense and old wood. I kneel in the last pew, not sure if I'm praying or just hiding. An old priest sits beside me. 'You look like a man carrying a mountain, my son.' I tell him everything—the gambling, the debt, Kael's offer. He listens without judgment.",
-        background: "church",
-        sprite: "priest",
-        choices: [
-            { text: "🙏 'Help me change'", nextId: "good_rehab", type: "good" },
-            { text: "💪 'I want to go to rehab'", nextId: "good_rehab_center", type: "good" },
-            { text: "❤️ 'Is there anyone who understands?'", nextId: "good_meet_elena", type: "good" },
-            { text: "😞 'I'm not sure I can'", nextId: "good_doubt", type: "neutral" }
-        ],
-        nextId: "good_rehab"
+    "seek_help":{
+        id:"seek_help", speaker:"Leo",
+        text:"I walk away from Kael. The rain soaks through my jacket, mixing with tears I didn't know I had left. I find a small church, the door unlocked as if waiting for me. An old priest sits in the front pew. 'My son, you look like you've been carrying a mountain.' I collapse into the seat beside him. 'Father, I've lost everything. My family, my money, my soul.' He places a hand on my shoulder. 'Then you've come to the right place. Let's start with a cup of coffee and a story.' For the first time in years, I feel something other than despair—a tiny flicker of hope.",
+        background:"church", sprite:"priest",
+        choices:[
+            {text:"🙏 Confess everything", nextId:"confess_priest", type:"good"},
+            {text:"💪 Ask for rehab recommendations", nextId:"rehab_search", type:"good"},
+            {text:"📞 Call my daughter", nextId:"call_daughter", type:"good"},
+            {text:"😞 Sit in silence and then leave", nextId:"back_to_casino", type:"bad"}
+        ], nextId:"confess_priest"
     },
-    
-    "good_rehab": {
-        id: "good_rehab",
-        speaker: "Maria",
-        text: "The rehab center is plain but clean. A counselor named Maria has kind eyes. 'We've all hit rock bottom,' she says. 'The question is: will you climb back up?' For the first time in years, I nod. 'I want to try.'",
-        background: "rehab_center",
-        sprite: "maria",
-        choices: [
-            { text: "💪 Commit to 90 days", nextId: "good_90_days", type: "good" },
-            { text: "🕊️ Join a support group", nextId: "good_support_group", type: "good" },
-            { text: "📞 Call my daughter", nextId: "good_call_daughter", type: "good" },
-            { text: "🏃 Leave after one day", nextId: "bad_path_1", type: "bad" }
-        ],
-        nextId: "good_90_days"
+    "confess_priest":{
+        id:"confess_priest", speaker:"Father Michael",
+        text:"'I've heard worse, my son. Addiction is a disease, not a sin. But you must choose to heal. There's a woman named Elena who comes here every Tuesday. She lost her husband to gambling. She might understand.' He gives me a card for a Gamblers Anonymous meeting. 'Go tonight. Don't think. Just go.' I take the card, my hands still shaking. Outside, the rain has stopped. A sliver of moonlight breaks through the clouds. Maybe—just maybe—there's a way out.",
+        background:"church", sprite:"priest",
+        choices:[
+            {text:"🙏 Join a support group tonight", nextId:"support_group1", type:"good"},
+            {text:"💪 Check into rehab tomorrow", nextId:"rehab_intake", type:"good"},
+            {text:"📝 Write apology letters to my family", nextId:"apology_letters", type:"good"},
+            {text:"🕊️ Volunteer at the shelter", nextId:"volunteer", type:"good"}
+        ], nextId:"support_group1"
     },
-    
-    "good_90_days": {
-        id: "good_90_days",
-        speaker: "Leo",
-        text: "Ninety days. No gambling. No Kael. I get a job at a diner—minimum wage, grease burns on my arms, but honest work. On day 87, Kael finds me. 'You think you can hide? You owe me.' But I stand my ground. 'I owe you nothing. I'm done.'",
-        background: "small_town",
-        sprite: "leo_neutral",
-        choices: [
-            { text: "🛡️ 'Call the police. I have evidence.'", nextId: "good_justice", type: "good" },
-            { text: "💪 Focus on my recovery", nextId: "good_continue_recovery", type: "good" },
-            { text: "❤️ Rebuild with my family", nextId: "good_family", type: "good" },
-            { text: "😞 Relapse under pressure", nextId: "ending_relapse", type: "bad" }
-        ],
-        nextId: "good_justice"
+    "support_group1":{
+        id:"support_group1", speaker:"Elena",
+        text:"The meeting is in a church basement. Folding chairs in a circle, stale coffee, and broken people. I sit in the back, ready to run. Then a woman with kind eyes sits next to me. 'First time?' she asks. I nod. 'I'm Elena. My husband was a gambler. He lost our house, our savings, then his life. He drove his car into a bridge after losing everything.' She touches my hand. 'Don't let the same demons win.' When it's my turn to speak, my voice cracks. 'I'm Leo. I'm a compulsive gambler.' The shame doesn't crush me. It lifts.",
+        background:"support_group", sprite:"maria",
+        choices:[
+            {text:"🕊️ Commit to 90 meetings in 90 days", nextId:"ninety_days", type:"good"},
+            {text:"💪 Ask Elena to be your sponsor", nextId:"elena_sponsor", type:"good"},
+            {text:"📞 Call my daughter and apologize", nextId:"call_daughter2", type:"good"},
+            {text:"🏃 Leave halfway through—it's too much", nextId:"back_to_casino", type:"bad"}
+        ], nextId:"ninety_days"
     },
-    
-    "good_justice": {
-        id: "good_justice",
-        speaker: "Agent Williams",
-        text: "'This is huge, Leo. The evidence you've gathered—it's enough to put Kael away for life. But we need you to testify. It's dangerous. He has connections everywhere.'",
-        background: "evidence_room",
-        sprite: "agent",
-        choices: [
-            { text: "🛡️ 'I'll do it. It's time to end this.'", nextId: "ending_justice", type: "good" },
-            { text: "🙏 'Protect my family first'", nextId: "ending_redemption", type: "good" },
-            { text: "😰 'I'm scared. Give me time.'", nextId: "good_doubt", type: "neutral" },
-            { text: "💰 'What's in it for me?'", nextId: "neutral_path_1", type: "neutral" }
-        ],
-        nextId: "ending_justice"
+    "ninety_days":{
+        id:"ninety_days", speaker:"Leo",
+        text:"Ninety days. No gambling. No Kael. No late nights in casinos. Elena calls me every morning. Frank, an old-timer with 20 years clean, becomes my sponsor. I get a job at a diner—minimum wage, grease burns on my arms, but honest work. On day 87, Kael finds me. 'You think you can hide?' he snarls. 'You owe me.' Elena steps between us. 'He owes you nothing. Leave him alone or I call the police.' Kael laughs, but he leaves. That night, I hold Elena's hand. 'Thank you,' I whisper. She squeezes back. 'You saved yourself. I just pointed the way.'",
+        background:"small_town", sprite:"leo_neutral",
+        choices:[
+            {text:"❤️ Ask Elena to be more than a friend", nextId:"romance", type:"good"},
+            {text:"💪 Focus on recovery alone", nextId:"alone_recovery", type:"good"},
+            {text:"📢 Speak at other meetings to help others", nextId:"speaker_path", type:"good"},
+            {text:"😞 Relapse under pressure", nextId:"ending_relapse", type:"bad"}
+        ], nextId:"romance"
     },
-    
-    "good_call_daughter": {
-        id: "good_call_daughter",
-        speaker: "Sarah",
-        text: "'Dad? Is that really you?' Her voice cracks. 'I thought you were dead.' Tears stream down my face. 'I'm in recovery, sweetheart. I'm trying to be better.' Silence. Then crying. 'I want to see you.'",
-        background: "small_town",
-        sprite: "daughter",
-        choices: [
-            { text: "🤝 'Visit me this weekend'", nextId: "good_family_reunion", type: "good" },
-            { text: "💪 'Give me 30 more days'", nextId: "good_continue_recovery", type: "good" },
-            { text: "💰 'I'll send you money'", nextId: "neutral_payment", type: "neutral" },
-            { text: "😞 'I'm not ready'", nextId: "good_doubt", type: "bad" }
-        ],
-        nextId: "good_family_reunion"
+    "romance":{
+        id:"romance", speaker:"Elena",
+        text:"'Leo, I've been hurt before. I can't be your reason for staying clean. You have to do it for yourself.' I nod, understanding. 'But,' she adds, 'I can be your friend. And maybe someday, when you're strong enough... we can see where this goes.' It's not the answer I wanted, but it's the one I needed. For the first time, I have something to look forward to that isn't a roulette wheel. I hug her goodbye, then walk to my next meeting. The sun is rising. So am I.",
+        background:"small_town", sprite:"maria",
+        choices:[
+            {text:"🕊️ Keep working on yourself, one day at a time", nextId:"ending_redemption", type:"good"},
+            {text:"💪 Start a recovery blog to help others", nextId:"ending_inspire", type:"good"},
+            {text:"📖 Write a memoir about your journey", nextId:"ending_author", type:"good"},
+            {text:"😞 Push her away and relapse", nextId:"ending_relapse", type:"bad"}
+        ], nextId:"ending_redemption"
     },
-    
-    "good_family_reunion": {
-        id: "good_family_reunion",
-        speaker: "Sarah",
-        text: "She shows up with sunflowers. 'Mom said I shouldn't come. She said you'd disappoint me again.' I hug her, and she doesn't pull away. 'I won't,' I whisper. 'I promise.' We spend the day at the park. For a few hours, I forget about everything. I'm just a dad.",
-        background: "small_town",
-        sprite: "daughter",
-        choices: [
-            { text: "🕊️ Make amends with your ex-wife", nextId: "ending_family", type: "good" },
-            { text: "💪 Keep focusing on recovery", nextId: "ending_redemption", type: "good" },
-            { text: "📢 Share your story to help others", nextId: "ending_inspire", type: "good" },
-            { text: "😞 Break down and confess everything", nextId: "good_justice", type: "neutral" }
-        ],
-        nextId: "ending_family"
+    "call_daughter2":{
+        id:"call_daughter2", speaker:"Sarah (Daughter)",
+        text:"The phone rings three times. I almost hang up. Then her voice: 'Dad?' It's fragile, like thin ice. 'I'm in recovery, Sarah. I'm trying to be better.' Silence. Then crying. 'I've wanted to hear that for two years.' We talk for an hour. She tells me about school, her new puppy, how she still has the teddy bear I gave her when she was five. 'Can I visit you?' she asks. My throat closes. 'I'd like that, sweetheart. I'd like that very much.'",
+        background:"small_town", sprite:"daughter",
+        choices:[
+            {text:"🤝 Invite her to visit next weekend", nextId:"daughter_visit", type:"good"},
+            {text:"💪 Promise to call every day", nextId:"daily_calls", type:"good"},
+            {text:"😞 Tell her you're not ready yet", nextId:"back_to_casino", type:"bad"}
+        ], nextId:"daughter_visit"
     },
-    
-    "neutral_path_1": {
-        id: "neutral_path_1",
-        speaker: "Leo",
-        text: "'What's the catch?' Kael smiles. 'Everything has a price. Yours is your soul. But I pay well. Fifty thousand for your first job. More after that.'",
-        background: "kael_office",
-        sprite: "kael",
-        choices: [
-            { text: "💰 'Show me the money'", nextId: "bad_path_1", type: "bad" },
-            { text: "🕵️ 'I'll think about it'", nextId: "neutral_investigate", type: "neutral" },
-            { text: "🙏 'I can't do this'", nextId: "good_path_1", type: "good" },
-            { text: "🤝 'Let me work legally for you'", nextId: "neutral_legal", type: "neutral" }
-        ],
-        nextId: "neutral_investigate"
+    "daughter_visit":{
+        id:"daughter_visit", speaker:"Sarah",
+        text:"She shows up with a bouquet of sunflowers. 'Mom said I shouldn't come. She said you'd disappoint me again.' I hug her, and she doesn't pull away. 'I won't,' I whisper. 'I promise.' We spend the day at the park. I push her on the swings like I used to. For a few hours, I forget about Kael, about the debts, about the casino. I'm just a dad. And maybe that's enough.",
+        background:"small_town", sprite:"daughter",
+        choices:[
+            {text:"🕊️ Make amends with your ex-wife too", nextId:"amends_ex", type:"good"},
+            {text:"💪 Keep focusing on recovery for her", nextId:"ending_family", type:"good"},
+            {text:"📢 Share your story at her school", nextId:"ending_inspire", type:"good"}
+        ], nextId:"ending_family"
     },
-    
-    "neutral_investigate": {
-        id: "neutral_investigate",
-        speaker: "Leo",
-        text: "I pretend to accept. But every night, I document everything. Kael's operations. His contacts. His crimes. I don't know what I'll do with the information yet, but I want options.",
-        background: "evidence_room",
-        sprite: "leo_neutral",
-        choices: [
-            { text: "📁 'Go to the FBI'", nextId: "good_justice", type: "good" },
-            { text: "💰 'Sell the evidence to Kael's rival'", nextId: "ending_empty_throne", type: "bad" },
-            { text: "🔥 'Burn it and walk away'", nextId: "ending_runaway", type: "neutral" },
-            { text: "📢 'Leak it to the press'", nextId: "ending_justice", type: "good" }
-        ],
-        nextId: "good_justice"
+    // ========== ENDINGS (Long, satisfying) ==========
+    "ending_redemption":{
+        id:"ending_redemption", speaker:"Leo (Years Later)",
+        text:"I stand at the podium, looking out at a room full of strangers. 'My name is Leo, and I'm a recovering gambler.' They applaud. Elena sits in the front row, holding my hand. Sarah is next to her, now a teenager, beaming. I've been clean for five years. I run a recovery center that has helped over a thousand addicts. Kael is in prison—thanks to the evidence I helped gather. The casino lights no longer call to me. Instead, I see the light in people's eyes when they take their first step toward healing. The gambler died that night in the church. What rose from the ashes was a man who finally understands: the biggest win isn't money. It's forgiveness.",
+        background:"support_group", sprite:"leo_neutral",
+        choices:[{text:"🌟 Play again", nextId:"start", type:"good"}], nextId:"start"
     },
-    
-    "curious_path_1": {
-        id: "curious_path_1",
-        speaker: "Kael",
-        text: "'Who am I? I'm the man who owns this city's underworld. Gamblers like you are my favorite prey. But I'm offering you a seat at my table. Take it or leave it.'",
-        background: "kael_office",
-        sprite: "kael",
-        choices: [
-            { text: "💀 'I'm in'", nextId: "bad_path_1", type: "bad" },
-            { text: "🕵️ 'Let me research you first'", nextId: "neutral_investigate", type: "neutral" },
-            { text: "🙏 'I choose recovery'", nextId: "good_path_1", type: "good" },
-            { text: "📢 'I'll expose you'", nextId: "good_justice", type: "good" }
-        ],
-        nextId: "neutral_investigate"
+    "ending_justice":{
+        id:"ending_justice", speaker:"News Anchor",
+        text:"In a historic trial, Kael is convicted on 47 counts, including racketeering, bribery, and three murders. Leo Marino, once a broke gambler, is hailed as a hero. He testifies for three days, his voice steady, his eyes clear. After the verdict, he visits Victor's daughter in the hospital—her surgery was paid for by an anonymous donor. She doesn't know it was Leo. He prefers it that way. 'I didn't do it for fame,' he tells a reporter. 'I did it because some debts can't be paid with money. Only with truth.' He opens a chain of recovery centers called 'The Second Deal.' His daughter visits every weekend.",
+        background:"courtroom", sprite:"leo_neutral",
+        choices:[{text:"⚖️ Play again", nextId:"start", type:"good"}], nextId:"start"
     },
-    
-    // ========== ENDINGS ==========
-    
-    "ending_monster": {
-        id: "ending_monster",
-        speaker: "Narrator",
-        text: "Leo became the new king of the underworld. Worse than Kael ever was. He now controls the city through fear. The gambler who had nothing now has everything—and it's still not enough. [EXTREME BAD ENDING: THE MONSTER]",
-        background: "luxury_office",
-        sprite: "leo_evil",
-        choices: [{ text: "💀 Play Again", nextId: "start", type: "bad" }],
-        nextId: "start"
+    "ending_monster":{
+        id:"ending_monster", speaker:"Kael (Narrating)",
+        text:"Leo sits in my chair now. The chair I built on bones and broken dreams. He's worse than I ever was. Last week, he ordered a hit on a rival. The week before, he ruined a family for fun. The gambler who had nothing now has everything—and it's still not enough. I watch from my prison cell, almost proud. Almost. Because I know the truth: the house always wins. And Leo? He's the house now. But houses crumble. And when his does, I'll be here, smiling.",
+        background:"luxury_office", sprite:"leo_evil",
+        choices:[{text:"💀 Play again", nextId:"start", type:"bad"}], nextId:"start"
     },
-    
-    "ending_empty_throne": {
-        id: "ending_empty_throne",
-        speaker: "Leo",
-        text: "I sit in Kael's chair. The view is beautiful. Millions in the bank. But I feel nothing. The emptiness is louder than any slot machine. I won everything... and lost my soul. [BAD ENDING: THE EMPTY THRONE]",
-        background: "luxury_office",
-        sprite: "leo_evil",
-        choices: [{ text: "👑 Play Again", nextId: "start", type: "bad" }],
-        nextId: "start"
+    "ending_family":{
+        id:"ending_family", speaker:"Sarah",
+        text:"Dad walks me down the aisle. Not for my wedding—for his five-year sobriety chip ceremony. 'I'm proud of you,' I whisper. He cries. I've only seen him cry twice before: the day Mom left, and today. After the ceremony, we go to the diner where he used to work. He owns it now. 'Family recipe,' he says, sliding a plate of pancakes toward me. 'No gambling, no lies, just batter and butter.' I take a bite. It tastes like forgiveness.",
+        background:"small_town", sprite:"daughter",
+        choices:[{text:"🏠 Play again", nextId:"start", type:"good"}], nextId:"start"
     },
-    
-    "ending_justice": {
-        id: "ending_justice",
-        speaker: "News Anchor",
-        text: "In a historic trial, Kael is convicted on 47 counts. Leo Marino, once a broke gambler, is hailed as a hero. He opens a chain of recovery centers called 'The Second Deal.' Thousands of lives saved. [GOOD ENDING: JUSTICE]",
-        background: "courtroom",
-        sprite: "leo_neutral",
-        choices: [{ text: "⚖️ Play Again", nextId: "start", type: "good" }],
-        nextId: "start"
+    "ending_inspire":{
+        id:"ending_inspire", speaker:"Leo (TED Talk)",
+        text:"The applause is deafening. I stand in the spotlight, holding my five-year chip. 'My name is Leo, and I'm a gambler. Not anymore. But the urge never goes away. Every day, I choose not to place a bet. Every day, I choose my daughter. My friends. My life. If you're out there, drowning in debt or shame, know this: the only bet that matters is the one you place on yourself.' The video goes viral. Fifty million views. My phone doesn't stop ringing. I don't answer. I have a meeting in an hour. There's a man there who lost his house today. He needs to hear that it's not the end. It's just the beginning.",
+        background:"support_group", sprite:"leo_neutral",
+        choices:[{text:"📢 Play again", nextId:"start", type:"good"}], nextId:"start"
     },
-    
-    "ending_redemption": {
-        id: "ending_redemption",
-        speaker: "Leo",
-        text: "I stand at the podium, looking at a room full of strangers. 'My name is Leo, and I'm a recovering gambler.' They applaud. I've been clean for five years. I run a recovery center. The casino lights no longer call to me. [BEST ENDING: TRUE REDEMPTION]",
-        background: "support_group",
-        sprite: "leo_neutral",
-        choices: [{ text: "🌟 Play Again", nextId: "start", type: "good" }],
-        nextId: "start"
+    "ending_bad_soul":{
+        id:"ending_bad_soul", speaker:"Narrator",
+        text:"The paramedics find him in the bathroom of the Bellagio. Needle still in his arm. Slot machine blinking 'JACKPOT' in the next room. His daughter's last text, unread: 'Dad, please call me.' No one comes to claim the body. The casino sweeps it under the rug. The next day, someone else sits at his favorite machine. The wheel spins. The house always wins.",
+        background:"casino_empty", sprite:"leo_sad",
+        choices:[{text:"💀 Play again", nextId:"start", type:"bad"}], nextId:"start"
     },
-    
-    "ending_family": {
-        id: "ending_family",
-        speaker: "Sarah",
-        text: "Dad walks me down the aisle. Not for my wedding—for his five-year sobriety chip ceremony. 'I'm proud of you,' I whisper. He cries. After the ceremony, we go to the diner where he used to work. He owns it now. [GOOD ENDING: FAMILY]",
-        background: "small_town",
-        sprite: "daughter",
-        choices: [{ text: "🏠 Play Again", nextId: "start", type: "good" }],
-        nextId: "start"
-    },
-    
-    "ending_inspire": {
-        id: "ending_inspire",
-        speaker: "Audience",
-        text: "Leo's TED Talk 'From Gambler to Healer' goes viral. Fifty million views. He becomes a global speaker for addiction recovery. His story saves thousands of lives. [GOOD ENDING: INSPIRATION]",
-        background: "support_group",
-        sprite: "leo_neutral",
-        choices: [{ text: "📢 Play Again", nextId: "start", type: "good" }],
-        nextId: "start"
-    },
-    
-    "ending_runaway": {
-        id: "ending_runaway",
-        speaker: "Leo",
-        text: "I change my name. Start over in a small town. No one knows my past. I work at a gas station. Every night, I dream of slot machines. But every morning, I wake up free. [NEUTRAL ENDING: RUNAWAY]",
-        background: "small_town",
-        sprite: "leo_sad",
-        choices: [{ text: "🌅 Play Again", nextId: "start", type: "neutral" }],
-        nextId: "start"
-    },
-    
-    "ending_martyr": {
-        id: "ending_martyr",
-        speaker: "News Anchor",
-        text: "Leo died taking down Kael's empire. His evidence convicted 30 criminals. He's buried as a hero. His daughter leaves sunflowers on his grave every Sunday. [TRAGIC ENDING: THE MARTYR]",
-        background: "courtroom",
-        sprite: "leo_angry",
-        choices: [{ text: "🕯️ Play Again", nextId: "start", type: "neutral" }],
-        nextId: "start"
-    },
-    
-    "ending_relapse": {
-        id: "ending_relapse",
-        speaker: "Narrator",
-        text: "Leo relapses. He loses everything again. This time, there's no one left to save him. The slot machines keep ringing. No one notices. [SAD ENDING: RELAPSE]",
-        background: "casino_empty",
-        sprite: "leo_sad",
-        choices: [{ text: "💔 Play Again", nextId: "start", type: "bad" }],
-        nextId: "start"
+    "ending_relapse":{
+        id:"ending_relapse", speaker:"Narrator",
+        text:"Leo relapsed on day 103. He lost his job, his apartment, his daughter's trust. Elena stopped answering his calls. Now he sleeps in his car behind the casino. Sometimes he goes inside, just to feel the lights on his face. He knows he'll die here. He just doesn't care anymore.",
+        background:"casino_night", sprite:"leo_sad",
+        choices:[{text:"🔁 Play again", nextId:"start", type:"bad"}], nextId:"start"
     }
 };
 
-// ============================================================
-// GAME ENGINE
-// ============================================================
-
-let currentNodeId = "start";
-let waitingForChoice = false;
-
+// ========== GAME ENGINE ==========
+let currentNodeId = "start", waitingForChoice = false;
 const bgCanvas = document.getElementById("bgCanvas");
 const portraitCanvas = document.getElementById("portraitCanvas");
 const speakerDiv = document.getElementById("speakerName");
@@ -1137,104 +321,43 @@ const nextBtn = document.getElementById("nextBtn");
 const resetBtn = document.getElementById("resetBtn");
 
 function generateBgURL(key) {
-    let d = backgroundDrawers[key] || backgroundDrawers.default_bg;
+    let d = backgroundDrawers[key] || backgroundDrawers.casino_night;
     let c = document.createElement("canvas");
-    c.width = 1280;
-    c.height = 720;
+    c.width = 1280; c.height = 720;
     d(c.getContext("2d"), 1280, 720);
     return c.toDataURL();
 }
-
 function renderVisuals(node) {
-    // Draw background
     let bg = new Image();
-    bg.onload = () => {
-        let ctx = bgCanvas.getContext("2d");
-        bgCanvas.width = 1280;
-        bgCanvas.height = 720;
-        ctx.drawImage(bg, 0, 0);
-    };
+    bg.onload = () => { let ctx = bgCanvas.getContext("2d"); bgCanvas.width = 1280; bgCanvas.height = 720; ctx.drawImage(bg, 0, 0); };
     bg.src = generateBgURL(node.background);
-    
-    // Draw character portrait
-    const portraitCtx = portraitCanvas.getContext("2d");
-    drawPortrait(portraitCtx, node.sprite || "leo_neutral");
+    drawPortrait(portraitCanvas.getContext("2d"), node.sprite || "leo_neutral");
 }
-
 function renderChoices(choices) {
     choicesDiv.innerHTML = "";
-    if(!choices || choices.length === 0) {
-        choicesDiv.classList.add("hidden");
-        return;
-    }
+    if(!choices || choices.length===0) { choicesDiv.classList.add("hidden"); return; }
     choicesDiv.classList.remove("hidden");
     choices.forEach(ch => {
-        let btn = document.createElement("button");
-        btn.className = "choice-btn";
+        let btn = document.createElement("button"); btn.className = "choice-btn";
         let badge = "";
-        if(ch.type === "good") badge = "<span class='choice-badge badge-good'>✨ GOOD</span>";
-        else if(ch.type === "bad") badge = "<span class='choice-badge badge-bad'>💀 BAD</span>";
-        else if(ch.type === "neutral") badge = "<span class='choice-badge badge-neutral'>⚖️ NEUTRAL</span>";
+        if(ch.type==="good") badge = "<span class='choice-badge badge-good'>✨ GOOD</span>";
+        else if(ch.type==="bad") badge = "<span class='choice-badge badge-bad'>💀 BAD</span>";
+        else if(ch.type==="neutral") badge = "<span class='choice-badge badge-neutral'>⚖️ NEUTRAL</span>";
         btn.innerHTML = ch.text + " " + badge;
-        btn.onclick = () => {
-            if(waitingForChoice) {
-                incrementDecision();
-                goToNode(ch.nextId);
-            }
-        };
+        btn.onclick = () => { if(waitingForChoice) goToNode(ch.nextId); };
         choicesDiv.appendChild(btn);
     });
 }
-
 function displayNode(node) {
     renderVisuals(node);
     speakerDiv.innerText = node.speaker;
     messageDiv.innerText = node.text;
-    
-    // Animation
-    messageDiv.classList.remove("fade-text");
-    void messageDiv.offsetWidth;
-    messageDiv.classList.add("fade-text");
-    
-    if(node.choices && node.choices.length > 0) {
-        waitingForChoice = true;
-        renderChoices(node.choices);
-    } else {
-        waitingForChoice = false;
-        renderChoices([]);
-    }
+    messageDiv.classList.remove("fade-text"); void messageDiv.offsetWidth; messageDiv.classList.add("fade-text");
+    if(node.choices && node.choices.length) { waitingForChoice = true; renderChoices(node.choices); }
+    else { waitingForChoice = false; renderChoices([]); }
 }
-
-function goToNode(id) {
-    if(gameData[id]) {
-        currentNodeId = id;
-        displayNode(gameData[currentNodeId]);
-    } else {
-        console.warn("Missing node:", id);
-        goToNode("start");
-    }
-}
-
-function nextStep() {
-    if(!waitingForChoice) {
-        let node = gameData[currentNodeId];
-        if(node && node.nextId) {
-            incrementDecision();
-            goToNode(node.nextId);
-        } else {
-            goToNode("start");
-        }
-    }
-}
-
-function resetGame() {
-    resetProgress();
-    goToNode("start");
-}
-
-// Event listeners
-nextBtn.onclick = nextStep;
-resetBtn.onclick = resetGame;
-
-// Initialize
+function goToNode(id) { if(gameData[id]) { currentNodeId = id; displayNode(gameData[currentNodeId]); } else goToNode("start"); }
+function nextStep() { if(!waitingForChoice) { let node = gameData[currentNodeId]; if(node && node.nextId) goToNode(node.nextId); else goToNode("start"); } }
+function resetGame() { goToNode("start"); }
+nextBtn.onclick = nextStep; resetBtn.onclick = resetGame;
 goToNode("start");
