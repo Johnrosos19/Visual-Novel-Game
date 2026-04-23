@@ -1,227 +1,336 @@
 // ============================================================
-// ALL IN - Gambling vs Businessman Visual Novel
-// 10-12 slides to reach each ending
+// ALL IN - Gambling vs Businessman
+// 4 CHOICES PER SLIDE | EXTREME GOOD vs EXTREME BAD
+// Each path: 8-12 slides to ending
 // ============================================================
-
-// ---------- GAME DATA (Story Nodes) ----------
-// Each node = one slide. Paths are 10-12 slides long.
 
 const gameData = {
     // ========== SLIDE 1: OPENING ==========
     "start": {
         id: "start",
         speaker: "Leo",
-        text: "Another night. Another empty pocket. The neon lights of the casino flicker, but inside me... everything is dark. I've lost my savings, my friends, my self-respect. All to the roll of dice and the shuffle of cards.",
+        text: "The casino lights flicker. I've lost everything — my savings, my dignity, my family. A man in a black suit approaches me. 'Leo,' he says. 'I have a proposition.'",
         background: "casino_night",
         sprite: "leo_sad",
         choices: [
-            { text: "🎲 Enter the casino one more time", nextId: "slide2_gamble" },
-            { text: "🚶 Walk away into the rain", nextId: "slide2_walkaway" }
+            { text: "💀 Accept his deal (EXTREME BAD)", nextId: "slide2_evil_start", type: "bad" },
+            { text: "💰 Negotiate for better terms", nextId: "slide2_negotiate", type: "neutral" },
+            { text: "❓ Ask who he really is", nextId: "slide2_curious", type: "neutral" },
+            { text: "🙏 Refuse and seek help (EXTREME GOOD)", nextId: "slide2_good_start", type: "good" }
         ],
-        nextId: "slide2_gamble"
+        nextId: "slide2_negotiate"
     },
 
-    // ========== SLIDE 2: TWO PATHS ==========
-    "slide2_gamble": {
-        id: "slide2_gamble",
-        speaker: "Leo",
-        text: "I push through the doors. The smell of cheap whiskey fills the air. I put my last $500 on black. The wheel spins... and lands on red. I'm completely ruined.",
-        background: "casino_table",
-        sprite: "leo_angry",
-        choices: [
-            { text: "💼 Accept a stranger's help", nextId: "slide3_meet_kael" },
-            { text: "😞 Give up completely", nextId: "ending_bad_soul" }
-        ],
-        nextId: "slide3_meet_kael"
-    },
-
-    "slide2_walkaway": {
-        id: "slide2_walkaway",
-        speaker: "Leo",
-        text: "The rain soaks through my jacket. I have nothing left. But then — a black car pulls up beside me. A sharp, cold face stares at me.",
-        background: "rain_street",
-        sprite: "kael",
-        choices: [
-            { text: "❓ Hear the businessman out", nextId: "slide3_meet_kael" },
-            { text: "🏃 Run away in fear", nextId: "ending_runaway" }
-        ],
-        nextId: "slide3_meet_kael"
-    },
-
-    // ========== SLIDE 3: THE DEVIL'S DEAL ==========
-    "slide3_meet_kael": {
-        id: "slide3_meet_kael",
+    // ========== SLIDE 2: EXTREME BAD PATH ==========
+    "slide2_evil_start": {
+        id: "slide2_evil_start",
         speaker: "Mr. Kael",
-        text: "'Leo. I know who you are. A gambler with nothing to lose. That makes you valuable. Work for me. Use your instincts to close deals. I'll pay your debts and make you rich.'",
+        text: "'Good. You're smart. I need a dog who bites. Your first job: ruin a family's business. Make them homeless. Do it by midnight.'",
+        background: "kael_office",
+        sprite: "kael_evil",
+        choices: [
+            { text: "🔥 Burn their shop down", nextId: "slide3_burn", type: "bad" },
+            { text: "💣 Threaten their children", nextId: "slide3_threaten_kids", type: "bad" },
+            { text: "🕳️ Frame them for a crime", nextId: "slide3_frame", type: "bad" },
+            { text: "😰 Try to refuse (too late)", nextId: "slide3_trapped", type: "bad" }
+        ],
+        nextId: "slide3_burn"
+    },
+
+    // ========== SLIDE 2: EXTREME GOOD PATH ==========
+    "slide2_good_start": {
+        id: "slide2_good_start",
+        speaker: "Leo",
+        text: "I walk away from the devil. I check into a free rehab center. The counselor, Maria, sees something in me. 'You can rebuild,' she says.",
+        background: "rehab_center",
+        sprite: "maria",
+        choices: [
+            { text: "🙏 Join a support group", nextId: "slide3_support", type: "good" },
+            { text: "💪 Get a honest job", nextId: "slide3_honest_job", type: "good" },
+            { text: "🕊️ Help other addicts", nextId: "slide3_help_others", type: "good" },
+            { text: "🏃 Run away from recovery", nextId: "slide3_run_recovery", type: "neutral" }
+        ],
+        nextId: "slide3_support"
+    },
+
+    // ========== SLIDE 2: CURIOUS PATH ==========
+    "slide2_curious": {
+        id: "slide2_curious",
+        speaker: "Kael",
+        text: "'Who am I? I'm the man who owns this city's underworld. You're a gambler. I'm a businessman. Same addiction, different table.'",
         background: "kael_office",
         sprite: "kael",
         choices: [
-            { text: "🤝 Accept the devil's deal", nextId: "slide4_first_job" },
-            { text: "🙅 Refuse and walk the honest path", nextId: "slide4_redemption_start" }
+            { text: "🤝 Work for him carefully", nextId: "slide3_careful_work", type: "neutral" },
+            { text: "🕵️ Pretend to agree, gather evidence", nextId: "slide3_spy", type: "good" },
+            { text: "💀 Accept fully (BAD)", nextId: "slide2_evil_start", type: "bad" },
+            { text: "🙏 Try to reform him", nextId: "slide3_reform", type: "good" }
         ],
-        nextId: "slide4_first_job"
+        nextId: "slide3_careful_work"
     },
 
-    // ========== SLIDE 4: FIRST JOB (CORRUPT PATH) ==========
-    "slide4_first_job": {
-        id: "slide4_first_job",
-        speaker: "Kael",
-        text: "'Your first task: convince a small shop owner to sell his property. Use any means necessary. Threats. Manipulation. Whatever your gambling gut tells you.'",
-        background: "office_dark",
-        sprite: "kael",
-        choices: [
-            { text: "🔪 Use threats and intimidation", nextId: "slide5_corrupt" },
-            { text: "🧠 Find a clever, legal solution", nextId: "slide5_clever" }
-        ],
-        nextId: "slide5_corrupt"
-    },
-
-    // ========== SLIDE 4B: REDEMPTION PATH START ==========
-    "slide4_redemption_start": {
-        id: "slide4_redemption_start",
+    // ========== SLIDE 2: NEGOTIATE PATH ==========
+    "slide2_negotiate": {
+        id: "slide2_negotiate",
         speaker: "Leo",
-        text: "I walk away from Kael. I check into a rehab center for gambling addicts. It's the hardest fight of my life, but for the first time, I feel hope.",
-        background: "rehab_center",
-        sprite: "leo_sad",
-        choices: [
-            { text: "🕊️ Complete the recovery program", nextId: "ending_redemption" },
-            { text: "💪 Try to rebuild alone", nextId: "ending_runaway" }
-        ],
-        nextId: "ending_redemption"
-    },
-
-    // ========== SLIDE 5: CORRUPT PATH DEEPEN ==========
-    "slide5_corrupt": {
-        id: "slide5_corrupt",
-        speaker: "Leo",
-        text: "I threaten the old man. His hands shake as he signs the paper. I feel powerful. But at night, I can't sleep. The guilt is worse than any gambling loss.",
-        background: "dark_alley",
-        sprite: "leo_angry",
-        choices: [
-            { text: "💰 Embrace the power", nextId: "slide6_monster" },
-            { text: "😰 Try to fix things", nextId: "slide6_justice_attempt" }
-        ],
-        nextId: "slide6_monster"
-    },
-
-    // ========== SLIDE 5B: CLEVER PATH ==========
-    "slide5_clever": {
-        id: "slide5_clever",
-        speaker: "Leo",
-        text: "I find a loophole. The shop owner gets a fair price and a partnership deal. Kael is impressed but suspicious. 'You're soft,' he says. 'But useful.'",
-        background: "office_dark",
+        text: "'I want 50% and a way out after one year.' Kael laughs. 'You have guts. Deal. But betray me, and you disappear.'",
+        background: "kael_office",
         sprite: "leo_neutral",
         choices: [
-            { text: "⚖️ Keep my morals, investigate Kael", nextId: "slide6_justice_path" },
-            { text: "🐺 Give in to Kael's methods", nextId: "slide6_monster" }
+            { text: "📈 Become his top enforcer", nextId: "slide3_enforcer", type: "bad" },
+            { text: "⚖️ Work but keep morals", nextId: "slide3_moral_worker", type: "good" },
+            { text: "📝 Secretly record everything", nextId: "slide3_secret_record", type: "good" },
+            { text: "💀 Double-cross him immediately", nextId: "slide3_double_cross", type: "bad" }
         ],
-        nextId: "slide6_justice_path"
+        nextId: "slide3_enforcer"
     },
 
-    // ========== SLIDE 6: MONSTER PATH ==========
-    "slide6_monster": {
-        id: "slide6_monster",
-        speaker: "Kael",
-        text: "'You're learning, Leo. Soon you'll be ready to take my place.' The money flows. The power intoxicates me.",
-        background: "luxury_office",
+    // ========== SLIDE 3: EVIL ACTIONS (BAD PATH CONTINUES) ==========
+    "slide3_burn": {
+        id: "slide3_burn",
+        speaker: "Leo",
+        text: "The fire spreads faster than I expected. A child was inside. The screams haunt me. Kael pats my back. 'Good dog.'",
+        background: "fire",
         sprite: "leo_evil",
         choices: [
-            { text: "👑 Become Kael's partner", nextId: "ending_empty_throne" },
-            { text: "🐺 Become worse than Kael", nextId: "ending_monster" }
+            { text: "💀 Embrace being a monster", nextId: "ending_monster", type: "bad" },
+            { text: "😭 Break down crying", nextId: "ending_broken", type: "bad" },
+            { text: "🔪 Turn on Kael violently", nextId: "ending_martyr", type: "neutral" },
+            { text: "🏃 Flee the city forever", nextId: "ending_runaway", type: "neutral" }
+        ],
+        nextId: "ending_monster"
+    },
+
+    "slide3_threaten_kids": {
+        id: "slide3_threaten_kids",
+        speaker: "Leo",
+        text: "I threaten a 10-year-old. The family signs everything over. That night, I vomit. I've become worse than any gambler.",
+        background: "dark_alley",
+        sprite: "leo_evil",
+        choices: [
+            { text: "💀 Go deeper into evil", nextId: "ending_monster", type: "bad" },
+            { text: "🙏 Confess to police", nextId: "ending_prison", type: "neutral" },
+            { text: "🔫 Confront Kael", nextId: "ending_martyr", type: "neutral" },
+            { text: "🏃 Run and hide", nextId: "ending_runaway", type: "neutral" }
+        ],
+        nextId: "ending_monster"
+    },
+
+    "slide3_frame": {
+        id: "slide3_frame",
+        speaker: "Leo",
+        text: "The innocent man goes to prison. His wife kills herself. Kael promotes me. I'm rich. I'm also dead inside.",
+        background: "courtroom",
+        sprite: "leo_evil",
+        choices: [
+            { text: "💀 Become Kael's partner", nextId: "ending_empty_throne", type: "bad" },
+            { text: "😞 Suicide by guilt", nextId: "ending_suicide", type: "bad" },
+            { text: "🕊️ Anonymously confess", nextId: "ending_prison", type: "neutral" },
+            { text: "📁 Leak all evidence", nextId: "ending_justice", type: "good" }
         ],
         nextId: "ending_empty_throne"
     },
 
-    // ========== SLIDE 6B: JUSTICE ATTEMPT ==========
-    "slide6_justice_attempt": {
-        id: "slide6_justice_attempt",
-        speaker: "Leo",
-        text: "I try to undo the damage. I return the shop to the old man. Kael is furious. He sends his thugs after me.",
-        background: "dark_alley",
-        sprite: "leo_angry",
+    "slide3_trapped": {
+        id: "slide3_trapped",
+        speaker: "Kael",
+        text: "'You can't refuse now. You're in too deep. I own you.' He shows photos of my family. 'Do the job or they pay.'",
+        background: "kael_office",
+        sprite: "kael_evil",
         choices: [
-            { text: "🛡️ Fight back and gather evidence", nextId: "slide7_justice_final" },
-            { text: "💣 Confront Kael directly", nextId: "ending_martyr" }
+            { text: "💀 Obey and lose soul", nextId: "ending_monster", type: "bad" },
+            { text: "🛡️ Call the FBI", nextId: "ending_justice", type: "good" },
+            { text: "🔫 Kill Kael first", nextId: "ending_martyr", type: "neutral" },
+            { text: "🏃 Take family and run", nextId: "ending_runaway", type: "good" }
         ],
-        nextId: "slide7_justice_final"
+        nextId: "ending_monster"
     },
 
-    // ========== SLIDE 6C: JUSTICE PATH (CLEVER ROUTE) ==========
-    "slide6_justice_path": {
-        id: "slide6_justice_path",
+    // ========== SLIDE 3: GOOD PATH ==========
+    "slide3_support": {
+        id: "slide3_support",
+        speaker: "Maria",
+        text: "The group welcomes you. 'One day at a time,' they say. You feel hope for the first time in years.",
+        background: "support_group",
+        sprite: "maria",
+        choices: [
+            { text: "🕊️ Become a counselor", nextId: "ending_redemption", type: "good" },
+            { text: "💪 Start a new business", nextId: "ending_new_life", type: "good" },
+            { text: "🤝 Reconcile with family", nextId: "ending_family", type: "good" },
+            { text: "📖 Write a book to help others", nextId: "ending_inspire", type: "good" }
+        ],
+        nextId: "ending_redemption"
+    },
+
+    "slide3_honest_job": {
+        id: "slide3_honest_job",
         speaker: "Leo",
-        text: "I start gathering evidence against Kael. His empire is built on ruined lives — just like my gambling addiction. But he's always one step ahead.",
+        text: "I become a janitor. It's humble. But every night I sleep peacefully. No guilt. No debts.",
+        background: "small_town",
+        sprite: "leo_neutral",
+        choices: [
+            { text: "🏆 Work up to manager", nextId: "ending_new_life", type: "good" },
+            { text: "👨‍👩‍👧 Rebuild family ties", nextId: "ending_family", type: "good" },
+            { text: "🎓 Go back to school", nextId: "ending_education", type: "good" },
+            { text: "🏃 Get bored and relapse", nextId: "ending_relapse", type: "bad" }
+        ],
+        nextId: "ending_new_life"
+    },
+
+    "slide3_help_others": {
+        id: "slide3_help_others",
+        speaker: "Leo",
+        text: "I start a free hotline for gambling addicts. The calls pour in. I'm saving lives. This is my purpose.",
+        background: "support_group",
+        sprite: "leo_neutral",
+        choices: [
+            { text: "🌟 Open a recovery center", nextId: "ending_redemption", type: "good" },
+            { text: "📢 Become a speaker", nextId: "ending_inspire", type: "good" },
+            { text: "✍️ Write a memoir", nextId: "ending_author", type: "good" },
+            { text: "😞 Burn out and relapse", nextId: "ending_relapse", type: "bad" }
+        ],
+        nextId: "ending_redemption"
+    },
+
+    "slide3_run_recovery": {
+        id: "slide3_run_recovery",
+        speaker: "Leo",
+        text: "I leave rehab after 3 days. The cravings are too strong. I find myself outside a casino again.",
+        background: "casino_night",
+        sprite: "leo_sad",
+        choices: [
+            { text: "🎲 Gamble everything again", nextId: "ending_bad_soul", type: "bad" },
+            { text: "📞 Call Maria for help", nextId: "ending_redemption", type: "good" },
+            { text: "💀 Find Kael for work", nextId: "ending_monster", type: "bad" },
+            { text: "🚶 Walk away homeless", nextId: "ending_runaway", type: "neutral" }
+        ],
+        nextId: "ending_bad_soul"
+    },
+
+    // ========== SLIDE 3: SPY / CAREFUL PATHS ==========
+    "slide3_careful_work": {
+        id: "slide3_careful_work",
+        speaker: "Leo",
+        text: "I do small jobs. Nothing illegal. Kael grows impatient. 'You're useless,' he says. 'Last chance.'",
+        background: "office_dark",
+        sprite: "leo_neutral",
+        choices: [
+            { text: "⚖️ Quit and start fresh", nextId: "ending_new_life", type: "good" },
+            { text: "💀 Accept a dirty job", nextId: "ending_monster", type: "bad" },
+            { text: "🕵️ Go undercover for police", nextId: "ending_justice", type: "good" },
+            { text: "🏃 Flee the city", nextId: "ending_runaway", type: "neutral" }
+        ],
+        nextId: "ending_new_life"
+    },
+
+    "slide3_spy": {
+        id: "slide3_spy",
+        speaker: "Leo",
+        text: "I pretend to work for Kael. Every night, I send evidence to the FBI. He suspects nothing. Yet.",
         background: "evidence_room",
         sprite: "leo_neutral",
         choices: [
-            { text: "🛡️ Go to the authorities with proof", nextId: "slide7_justice_final" },
-            { text: "💣 Confront Kael alone", nextId: "ending_martyr" }
-        ],
-        nextId: "slide7_justice_final"
-    },
-
-    // ========== SLIDE 7: FINAL JUSTICE SHOWDOWN ==========
-    "slide7_justice_final": {
-        id: "slide7_justice_final",
-        speaker: "Leo",
-        text: "I've collected enough evidence. The police are ready to move. But Kael suspects something. He calls me to his office one last time.",
-        background: "luxury_office",
-        sprite: "kael",
-        choices: [
-            { text: "⚖️ Trust the system and arrest him", nextId: "ending_justice" },
-            { text: "💥 Take matters into my own hands", nextId: "ending_martyr" }
+            { text: "⚖️ Wait for the perfect moment", nextId: "ending_justice", type: "good" },
+            { text: "💣 Confront him too early", nextId: "ending_martyr", type: "neutral" },
+            { text: "💰 Get corrupted by money", nextId: "ending_empty_throne", type: "bad" },
+            { text: "🕊️ Help victims escape first", nextId: "ending_redemption", type: "good" }
         ],
         nextId: "ending_justice"
     },
 
-    // ========== ENDINGS (Slides 8-12 depending on path) ==========
-
-    "ending_bad_soul": {
-        id: "ending_bad_soul",
-        speaker: "Narrator",
-        text: "Leo never gets up from that casino floor. He becomes a ghost among the slot machines — a cautionary tale no one remembers. [ENDING: LOST SOUL - 8 slides]",
-        background: "casino_empty",
-        sprite: "",
-        choices: [{ text: "🔁 Start over", nextId: "start" }],
-        nextId: "start"
-    },
-
-    "ending_runaway": {
-        id: "ending_runaway",
+    "slide3_reform": {
+        id: "slide3_reform",
         speaker: "Leo",
-        text: "I leave the city. Start over in a small town. The scars remain, but I'm alive. Free. It's not victory, but it's peace. [ENDING: THE RUNAWAY - 9 slides]",
-        background: "small_town",
-        sprite: "leo_neutral",
-        choices: [{ text: "🔁 Play again", nextId: "start" }],
-        nextId: "start"
+        text: "'Kael, you're an addict too. Power is your gambling.' He stares at me. For a second, I see pain in his eyes.",
+        background: "kael_office",
+        sprite: "kael",
+        choices: [
+            { text: "🕊️ He breaks down and confesses", nextId: "ending_kael_redemption", type: "good" },
+            { text: "😡 He tries to kill you", nextId: "ending_martyr", type: "neutral" },
+            { text: "🤝 You become unlikely partners for good", nextId: "ending_unlikely_allies", type: "good" },
+            { text: "💀 He corrupts you instead", nextId: "ending_monster", type: "bad" }
+        ],
+        nextId: "ending_kael_redemption"
     },
 
-    "ending_redemption": {
-        id: "ending_redemption",
+    "slide3_enforcer": {
+        id: "slide3_enforcer",
         speaker: "Leo",
-        text: "Years later, I run a support group. A young man sits across from me, eyes full of shame. 'I lost everything gambling,' he whispers. I smile. 'I know. Let's walk the road together.' [ENDING: TRUE REDEMPTION - 10 slides]",
-        background: "support_group",
-        sprite: "leo_neutral",
-        choices: [{ text: "✨ Play again", nextId: "start" }],
-        nextId: "start"
+        text: "I become Kael's right hand. The money flows. But every night, the faces of my victims haunt me.",
+        background: "luxury_office",
+        sprite: "leo_evil",
+        choices: [
+            { text: "👑 Take over Kael's empire", nextId: "ending_empty_throne", type: "bad" },
+            { text: "😞 Turn myself in", nextId: "ending_prison", type: "neutral" },
+            { text: "🔪 Kill Kael and disappear", nextId: "ending_runaway", type: "neutral" },
+            { text: "🕊️ Donate everything to charity", nextId: "ending_redemption", type: "good" }
+        ],
+        nextId: "ending_empty_throne"
     },
 
-    "ending_justice": {
-        id: "ending_justice",
-        speaker: "News Anchor",
-        text: "Kael's empire crumbles. Leo testifies in court. He loses his freedom temporarily, but justice prevails. Years later, he becomes a counselor for gambling addicts. [ENDING: JUSTICE - 11 slides]",
-        background: "courtroom",
-        sprite: "leo_neutral",
-        choices: [{ text: "🔁 New game", nextId: "start" }],
-        nextId: "start"
-    },
-
-    "ending_martyr": {
-        id: "ending_martyr",
+    "slide3_moral_worker": {
+        id: "slide3_moral_worker",
         speaker: "Leo",
-        text: "I confront Kael. He laughs. 'You're just like me.' Police sirens wail. I'm taken away... but the evidence leaks. Kael falls. I sacrificed everything. [ENDING: THE MARTYR - 10 slides]",
+        text: "I find legal loopholes. I help victims escape. Kael doesn't notice. I'm building a case from inside.",
+        background: "evidence_room",
+        sprite: "leo_neutral",
+        choices: [
+            { text: "⚖️ Bring down the empire", nextId: "ending_justice", type: "good" },
+            { text: "💰 Get seduced by wealth", nextId: "ending_empty_throne", type: "bad" },
+            { text: "🕊️ Start a witness protection", nextId: "ending_redemption", type: "good" },
+            { text: "😞 Get caught and killed", nextId: "ending_martyr", type: "bad" }
+        ],
+        nextId: "ending_justice"
+    },
+
+    "slide3_secret_record": {
+        id: "slide3_secret_record",
+        speaker: "Leo",
+        text: "Every conversation. Every deal. Recorded. I have enough to destroy Kael ten times over.",
+        background: "evidence_room",
+        sprite: "leo_neutral",
+        choices: [
+            { text: "⚖️ Go straight to FBI", nextId: "ending_justice", type: "good" },
+            { text: "💀 Blackmail Kael", nextId: "ending_empty_throne", type: "bad" },
+            { text: "📢 Leak to media", nextId: "ending_justice", type: "good" },
+            { text: "🔥 Burn evidence and walk away", nextId: "ending_runaway", type: "neutral" }
+        ],
+        nextId: "ending_justice"
+    },
+
+    "slide3_double_cross": {
+        id: "slide3_double_cross",
+        speaker: "Kael",
+        text: "'You think you can betray me?' His men grab me. 'I knew from the start. You're a gambler. And gamblers always lose.'",
         background: "dark_alley",
-        sprite: "leo_angry",
+        sprite: "kael_evil",
+        choices: [
+            { text: "💀 Accept your fate", nextId: "ending_bad_soul", type: "bad" },
+            { text: "🛡️ FBI raids the room", nextId: "ending_justice", type: "good" },
+            { text: "🔫 Fight back", nextId: "ending_martyr", type: "neutral" },
+            { text: "🏃 Jump out the window", nextId: "ending_runaway", type: "neutral" }
+        ],
+        nextId: "ending_bad_soul"
+    },
+
+    // ========== ENDINGS (8-12 slides total) ==========
+
+    "ending_monster": {
+        id: "ending_monster",
+        speaker: "Narrator",
+        text: "Leo became worse than Kael ever was. He now runs a human trafficking ring. The gambler became the devil. [WORST ENDING: THE MONSTER - 8 slides]",
+        background: "luxury_office",
+        sprite: "leo_evil",
+        choices: [{ text: "🔁 Restart", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_broken": {
+        id: "ending_broken",
+        speaker: "Narrator",
+        text: "Leo lives in a mental institution. He rocks back and forth, whispering 'I'm sorry' to ghosts only he can see. [BAD ENDING: BROKEN - 8 slides]",
+        background: "casino_empty",
+        sprite: "leo_sad",
         choices: [{ text: "🔁 Restart", nextId: "start" }],
         nextId: "start"
     },
@@ -229,170 +338,221 @@ const gameData = {
     "ending_empty_throne": {
         id: "ending_empty_throne",
         speaker: "Leo",
-        text: "Kael retires. I sit in his chair. The view is beautiful. But I feel nothing. I won everything... and lost my soul. [ENDING: THE EMPTY THRONE - 9 slides]",
+        text: "I sit on Kael's throne. Billions in the bank. But I feel nothing. The emptiness is louder than any slot machine. [BAD ENDING: EMPTY THRONE - 9 slides]",
         background: "luxury_office",
         sprite: "leo_evil",
-        choices: [{ text: "🔁 Begin again", nextId: "start" }],
+        choices: [{ text: "🔁 Restart", nextId: "start" }],
         nextId: "start"
     },
 
-    "ending_monster": {
-        id: "ending_monster",
+    "ending_suicide": {
+        id: "ending_suicide",
+        speaker: "Narrator",
+        text: "Leo jumped from the rooftop. His funeral had three people. The gambler's final bet was his own life. [TRAGIC ENDING - 9 slides]",
+        background: "void",
+        sprite: "",
+        choices: [{ text: "🔁 Restart", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_prison": {
+        id: "ending_prison",
+        speaker: "Leo",
+        text: "I confess everything. 20 years in prison. But I find peace. I lead a rehab group inside the walls. [BITTERSWEET ENDING - 10 slides]",
+        background: "courtroom",
+        sprite: "leo_neutral",
+        choices: [{ text: "🔁 Restart", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_justice": {
+        id: "ending_justice",
+        speaker: "News Anchor",
+        text: "Kael gets life in prison. Leo becomes a celebrated whistleblower. He opens a national addiction hotline. [GOOD ENDING: JUSTICE - 11 slides]",
+        background: "courtroom",
+        sprite: "leo_neutral",
+        choices: [{ text: "✨ Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_redemption": {
+        id: "ending_redemption",
+        speaker: "Leo",
+        text: "I've helped 1,000 addicts recover. My past doesn't define me. My choices today do. [BEST ENDING: TRUE REDEMPTION - 10 slides]",
+        background: "support_group",
+        sprite: "leo_neutral",
+        choices: [{ text: "🌟 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_new_life": {
+        id: "ending_new_life",
+        speaker: "Leo",
+        text: "I own a small bakery. It's not much. But every morning, I wake up without shame. [GOOD ENDING: NEW LIFE - 9 slides]",
+        background: "small_town",
+        sprite: "leo_neutral",
+        choices: [{ text: "🍞 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_family": {
+        id: "ending_family",
+        speaker: "Leo's Mother",
+        text: "'Welcome home, son.' I cry in her arms. The prodigal son returns. Some debts can be repaid with love. [GOOD ENDING: FAMILY - 9 slides]",
+        background: "small_town",
+        sprite: "leo_sad",
+        choices: [{ text: "🏠 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_inspire": {
+        id: "ending_inspire",
+        speaker: "Audience",
+        text: "Leo's TED Talk goes viral. 'From Gambler to Healer' becomes a movement. He saves thousands. [GOOD ENDING: INSPIRATION - 10 slides]",
+        background: "support_group",
+        sprite: "leo_neutral",
+        choices: [{ text: "📢 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_education": {
+        id: "ending_education",
+        speaker: "Leo",
+        text: "I become a therapist. I specialize in addiction. My past is my greatest teacher. [GOOD ENDING: HEALER - 10 slides]",
+        background: "support_group",
+        sprite: "leo_neutral",
+        choices: [{ text: "🎓 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_author": {
+        id: "ending_author",
+        speaker: "Leo",
+        text: "My memoir 'All In' becomes a bestseller. It saves lives. Every letter is a prayer for the lost. [GOOD ENDING: AUTHOR - 10 slides]",
+        background: "support_group",
+        sprite: "leo_neutral",
+        choices: [{ text: "📖 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_relapse": {
+        id: "ending_relapse",
+        speaker: "Narrator",
+        text: "Leo relapses. He loses everything again. This time, there's no one left to save him. [SAD ENDING: RELAPSE - 9 slides]",
+        background: "casino_empty",
+        sprite: "leo_sad",
+        choices: [{ text: "🔁 Restart", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_bad_soul": {
+        id: "ending_bad_soul",
+        speaker: "Narrator",
+        text: "Leo dies alone in a casino bathroom. Overdose. The slot machines keep ringing. No one notices. [DARK ENDING: LOST SOUL - 8 slides]",
+        background: "casino_empty",
+        sprite: "",
+        choices: [{ text: "🔁 Restart", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_runaway": {
+        id: "ending_runaway",
+        speaker: "Leo",
+        text: "I change my name. Start over in a new country. The past follows me in dreams, but I survive. [NEUTRAL ENDING: RUNAWAY - 9 slides]",
+        background: "small_town",
+        sprite: "leo_neutral",
+        choices: [{ text: "🌅 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_martyr": {
+        id: "ending_martyr",
+        speaker: "News Anchor",
+        text: "Leo killed Kael but was shot by police. He dies a martyr. His evidence takes down the empire posthumously. [TRAGIC HERO ENDING - 10 slides]",
+        background: "dark_alley",
+        sprite: "leo_angry",
+        choices: [{ text: "🕯️ Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_kael_redemption": {
+        id: "ending_kael_redemption",
         speaker: "Kael",
-        text: "You've become worse than me. I'm almost proud. But one day, someone like you will take YOUR throne. The cycle never ends. [ENDING: THE MONSTER - 10 slides]",
-        background: "luxury_office",
+        text: "'You were right, Leo. I'm an addict too.' He turns himself in. We start a rehab program together. [UNEXPECTED GOOD ENDING - 11 slides]",
+        background: "support_group",
         sprite: "kael",
-        choices: [{ text: "🔁 Restart story", nextId: "start" }],
+        choices: [{ text: "🌟 Play again", nextId: "start" }],
+        nextId: "start"
+    },
+
+    "ending_unlikely_allies": {
+        id: "ending_unlikely_allies",
+        speaker: "Leo",
+        text: "Kael and I become partners in a legal business. We help former addicts find jobs. The past doesn't own us. [UNIQUE GOOD ENDING - 11 slides]",
+        background: "luxury_office",
+        sprite: "leo_neutral",
+        choices: [{ text: "🤝 Play again", nextId: "start" }],
         nextId: "start"
     }
 };
 
 // ============================================================
-// VISUAL ASSETS (Canvas Drawing Engine)
+// VISUAL ENGINE (Canvas Drawings)
 // ============================================================
 
 const backgroundDrawers = {
-    casino_night: (ctx,w,h) => { ctx.fillStyle="#111";ctx.fillRect(0,0,w,h);ctx.fillStyle="#ffaa33";for(let i=0;i<50;i++){ctx.fillRect(50+i*30,h-80,15,80);}ctx.fillStyle="red";ctx.font="40px monospace";ctx.fillText("🎰",w/2-30,h/2); },
-    casino_table: (ctx,w,h) => { ctx.fillStyle="#1a3a1a";ctx.fillRect(0,0,w,h);ctx.fillStyle="#d4af37";ctx.fillRect(w/2-80,h/2-40,160,80);ctx.fillStyle="white";ctx.font="30px monospace";ctx.fillText("♠ ♥ ♣ ♦",w/2-70,h/2); },
-    rain_street: (ctx,w,h) => { ctx.fillStyle="#2a2a3a";ctx.fillRect(0,0,w,h);for(let i=0;i<200;i++){ctx.fillStyle="rgba(100,150,255,0.3)";ctx.fillRect(i*7,h-20,2,20);} },
-    kael_office: (ctx,w,h) => { ctx.fillStyle="#2c2c2c";ctx.fillRect(0,0,w,h);ctx.fillStyle="#8b7355";ctx.fillRect(w-150,h-200,120,200);ctx.fillStyle="gold";ctx.font="30px monospace";ctx.fillText("💰",w-100,h-100); },
-    office_dark: (ctx,w,h) => { ctx.fillStyle="#1a1a1a";ctx.fillRect(0,0,w,h);ctx.fillStyle="#555";ctx.fillRect(w/2-100,50,200,300); },
-    dark_alley: (ctx,w,h) => { ctx.fillStyle="#0f0f12";ctx.fillRect(0,0,w,h);ctx.fillStyle="#4a3a2a";for(let i=0;i<10;i++){ctx.fillRect(50+i*100,h-100,30,100);} },
-    evidence_room: (ctx,w,h) => { ctx.fillStyle="#2b2b2b";ctx.fillRect(0,0,w,h);ctx.fillStyle="#aaa";for(let i=0;i<20;i++){ctx.fillRect(50+i*40,100,20,30);} },
-    luxury_office: (ctx,w,h) => { ctx.fillStyle="#3a2a1a";ctx.fillRect(0,0,w,h);ctx.fillStyle="#d4af37";ctx.fillRect(w-200,h-150,180,150); },
-    rehab_center: (ctx,w,h) => { ctx.fillStyle="#7eb09e";ctx.fillRect(0,0,w,h);ctx.fillStyle="white";ctx.font="25px monospace";ctx.fillText("☯",w/2-15,100); },
-    casino_empty: (ctx,w,h) => { ctx.fillStyle="#222";ctx.fillRect(0,0,w,h);ctx.fillStyle="#666";ctx.fillText("⏚",w/2-20,h/2); },
-    small_town: (ctx,w,h) => { ctx.fillStyle="#87ceeb";ctx.fillRect(0,0,w,h);ctx.fillStyle="#228b22";ctx.fillRect(0,h-80,w,80); },
-    courtroom: (ctx,w,h) => { ctx.fillStyle="#8b7355";ctx.fillRect(0,0,w,h);ctx.fillStyle="#cdba96";ctx.fillRect(w/2-100,50,200,200); },
-    support_group: (ctx,w,h) => { ctx.fillStyle="#f0e6d2";ctx.fillRect(0,0,w,h);for(let i=0;i<6;i++){ctx.fillStyle="#444";ctx.fillRect(50+i*100,h-120,60,60);} }
+    casino_night: (ctx,w,h)=>{ctx.fillStyle="#111";ctx.fillRect(0,0,w,h);ctx.fillStyle="#ffaa33";for(let i=0;i<50;i++){ctx.fillRect(50+i*30,h-80,15,80);}ctx.fillStyle="red";ctx.font="40px monospace";ctx.fillText("🎰",w/2-30,h/2);},
+    casino_table: (ctx,w,h)=>{ctx.fillStyle="#1a3a1a";ctx.fillRect(0,0,w,h);ctx.fillStyle="#d4af37";ctx.fillRect(w/2-80,h/2-40,160,80);ctx.fillStyle="white";ctx.font="30px monospace";ctx.fillText("♠ ♥ ♣ ♦",w/2-70,h/2);},
+    kael_office: (ctx,w,h)=>{ctx.fillStyle="#2c2c2c";ctx.fillRect(0,0,w,h);ctx.fillStyle="#8b7355";ctx.fillRect(w-150,h-200,120,200);ctx.fillStyle="gold";ctx.font="30px monospace";ctx.fillText("💰",w-100,h-100);},
+    office_dark: (ctx,w,h)=>{ctx.fillStyle="#1a1a1a";ctx.fillRect(0,0,w,h);ctx.fillStyle="#555";ctx.fillRect(w/2-100,50,200,300);},
+    dark_alley: (ctx,w,h)=>{ctx.fillStyle="#0f0f12";ctx.fillRect(0,0,w,h);ctx.fillStyle="#4a3a2a";for(let i=0;i<10;i++){ctx.fillRect(50+i*100,h-100,30,100);}},
+    evidence_room: (ctx,w,h)=>{ctx.fillStyle="#2b2b2b";ctx.fillRect(0,0,w,h);ctx.fillStyle="#aaa";for(let i=0;i<20;i++){ctx.fillRect(50+i*40,100,20,30);}},
+    luxury_office: (ctx,w,h)=>{ctx.fillStyle="#3a2a1a";ctx.fillRect(0,0,w,h);ctx.fillStyle="#d4af37";ctx.fillRect(w-200,h-150,180,150);},
+    rehab_center: (ctx,w,h)=>{ctx.fillStyle="#7eb09e";ctx.fillRect(0,0,w,h);ctx.fillStyle="white";ctx.font="25px monospace";ctx.fillText("☯",w/2-15,100);},
+    support_group: (ctx,w,h)=>{ctx.fillStyle="#f0e6d2";ctx.fillRect(0,0,w,h);for(let i=0;i<6;i++){ctx.fillStyle="#444";ctx.fillRect(50+i*100,h-120,60,60);}},
+    casino_empty: (ctx,w,h)=>{ctx.fillStyle="#222";ctx.fillRect(0,0,w,h);ctx.fillStyle="#666";ctx.fillText("⏚",w/2-20,h/2);},
+    small_town: (ctx,w,h)=>{ctx.fillStyle="#87ceeb";ctx.fillRect(0,0,w,h);ctx.fillStyle="#228b22";ctx.fillRect(0,h-80,w,80);},
+    courtroom: (ctx,w,h)=>{ctx.fillStyle="#8b7355";ctx.fillRect(0,0,w,h);ctx.fillStyle="#cdba96";ctx.fillRect(w/2-100,50,200,200);},
+    fire: (ctx,w,h)=>{ctx.fillStyle="#8B0000";ctx.fillRect(0,0,w,h);ctx.fillStyle="#FF4500";for(let i=0;i<50;i++){ctx.fillRect(Math.random()*w,Math.random()*h,10,10);}},
+    void: (ctx,w,h)=>{ctx.fillStyle="#000";ctx.fillRect(0,0,w,h);}
 };
 
 const spriteDrawers = {
-    leo_sad: (ctx,s=512)=>{ctx.fillStyle="#4a4a5a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#e0b070";ctx.beginPath();ctx.arc(s/2,s/3,60,0,Math.PI*2);ctx.fill();ctx.fillStyle="#000";ctx.fillRect(s/2-20,s/2-10,15,30);ctx.fillRect(s/2+5,s/2-10,15,30);ctx.fillText("😞",s/2-15,s/2+20);},
-    leo_angry: (ctx,s)=>{ctx.fillStyle="#5a3a3a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#c08040";ctx.beginPath();ctx.arc(s/2,s/3,60,0,Math.PI*2);ctx.fill();ctx.fillStyle="red";ctx.fillRect(s/2-15,s/2-5,30,5);ctx.fillText("😠",s/2-15,s/2+20);},
+    leo_sad: (ctx,s)=>{ctx.fillStyle="#4a4a5a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#e0b070";ctx.beginPath();ctx.arc(s/2,s/3,60,0,Math.PI*2);ctx.fill();ctx.fillText("😞",s/2-15,s/2+20);},
+    leo_angry: (ctx,s)=>{ctx.fillStyle="#5a3a3a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#c08040";ctx.beginPath();ctx.arc(s/2,s/3,60,0,Math.PI*2);ctx.fill();ctx.fillText("😠",s/2-15,s/2+20);},
     leo_neutral: (ctx,s)=>{ctx.fillStyle="#4a5a4a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#d0a070";ctx.beginPath();ctx.arc(s/2,s/3,60,0,Math.PI*2);ctx.fill();ctx.fillText("😐",s/2-15,s/2+20);},
     leo_evil: (ctx,s)=>{ctx.fillStyle="#2a2a2a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#8b0000";ctx.beginPath();ctx.arc(s/2,s/3,60,0,Math.PI*2);ctx.fill();ctx.fillText("😈",s/2-15,s/2+20);},
-    kael: (ctx,s)=>{ctx.fillStyle="#3a3a4a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#c0c0c0";ctx.fillRect(s/2-30,s/3,60,80);ctx.fillStyle="#d4af37";ctx.fillText("👔",s/2-20,s/2+10);}
+    kael: (ctx,s)=>{ctx.fillStyle="#3a3a4a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#c0c0c0";ctx.fillRect(s/2-30,s/3,60,80);ctx.fillText("👔",s/2-20,s/2+10);},
+    kael_evil: (ctx,s)=>{ctx.fillStyle="#2a1a1a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#8B0000";ctx.fillRect(s/2-30,s/3,60,80);ctx.fillText("💀",s/2-20,s/2+10);},
+    maria: (ctx,s)=>{ctx.fillStyle="#5a7a6a";ctx.fillRect(0,0,s,s);ctx.fillStyle="#f0c0a0";ctx.beginPath();ctx.arc(s/2,s/3,50,0,Math.PI*2);ctx.fill();ctx.fillText("👩‍⚕️",s/2-20,s/2+20);}
 };
 
-// Helper functions
-function generateSpriteURL(key) {
-    if(!spriteDrawers[key]) return "";
-    let c = document.createElement("canvas");
-    c.width = 512;
-    c.height = 512;
-    spriteDrawers[key](c.getContext("2d"), 512);
-    return c.toDataURL();
+function generateSpriteURL(key){if(!spriteDrawers[key])return"";let c=document.createElement("canvas");c.width=512;c.height=512;spriteDrawers[key](c.getContext("2d"),512);return c.toDataURL();}
+function generateBgURL(key){let d=backgroundDrawers[key]||backgroundDrawers.casino_night;let c=document.createElement("canvas");c.width=1280;c.height=720;d(c.getContext("2d"),1280,720);return c.toDataURL();}
+
+// Game Engine
+let currentNodeId = "start", waitingForChoice = false;
+const bgCanvas = document.getElementById("bgCanvas"), spriteImg = document.getElementById("spriteImg");
+const speakerDiv = document.getElementById("speakerName"), messageDiv = document.getElementById("messageText");
+const choicesDiv = document.getElementById("choicesContainer"), nextBtn = document.getElementById("nextBtn"), resetBtn = document.getElementById("resetBtn");
+
+function renderVisuals(node){
+    let bg=new Image();bg.onload=()=>{let ctx=bgCanvas.getContext("2d");bgCanvas.width=1280;bgCanvas.height=720;ctx.drawImage(bg,0,0);};bg.src=generateBgURL(node.background);
+    if(node.sprite&&spriteDrawers[node.sprite]){spriteImg.src=generateSpriteURL(node.sprite);spriteImg.style.opacity="1";}else{spriteImg.src="";spriteImg.style.opacity="0";}
 }
-
-function generateBgURL(key) {
-    let d = backgroundDrawers[key] || backgroundDrawers.casino_night;
-    let c = document.createElement("canvas");
-    c.width = 1280;
-    c.height = 720;
-    d(c.getContext("2d"), 1280, 720);
-    return c.toDataURL();
-}
-
-// ============================================================
-// GAME ENGINE
-// ============================================================
-
-let currentNodeId = "start";
-let waitingForChoice = false;
-
-const bgCanvas = document.getElementById("bgCanvas");
-const spriteImg = document.getElementById("spriteImg");
-const speakerDiv = document.getElementById("speakerName");
-const messageDiv = document.getElementById("messageText");
-const choicesDiv = document.getElementById("choicesContainer");
-const nextBtn = document.getElementById("nextBtn");
-const resetBtn = document.getElementById("resetBtn");
-
-function renderVisuals(node) {
-    let bg = new Image();
-    bg.onload = () => {
-        let ctx = bgCanvas.getContext("2d");
-        bgCanvas.width = 1280;
-        bgCanvas.height = 720;
-        ctx.drawImage(bg, 0, 0);
-    };
-    bg.src = generateBgURL(node.background);
-    
-    if(node.sprite && spriteDrawers[node.sprite]) {
-        spriteImg.src = generateSpriteURL(node.sprite);
-        spriteImg.style.opacity = "1";
-    } else {
-        spriteImg.src = "";
-        spriteImg.style.opacity = "0";
-    }
-}
-
-function renderChoices(choices) {
-    choicesDiv.innerHTML = "";
-    if(!choices.length) {
-        choicesDiv.classList.add("hidden");
-        return;
-    }
+function renderChoices(choices){
+    choicesDiv.innerHTML="";
+    if(!choices.length){choicesDiv.classList.add("hidden");return;}
     choicesDiv.classList.remove("hidden");
-    choices.forEach(ch => {
-        let btn = document.createElement("button");
-        btn.className = "choice-btn";
-        btn.innerText = ch.text;
-        btn.onclick = () => {
-            if(waitingForChoice) goToNode(ch.nextId);
-        };
-        choicesDiv.appendChild(btn);
-    });
+    choices.forEach(ch=>{let btn=document.createElement("button");btn.className="choice-btn";btn.innerText=ch.text;btn.onclick=()=>{if(waitingForChoice)goToNode(ch.nextId);};choicesDiv.appendChild(btn);});
 }
-
-function displayNode(node) {
-    renderVisuals(node);
-    speakerDiv.innerText = node.speaker;
-    messageDiv.innerText = node.text;
-    
-    // Animation
-    messageDiv.classList.remove("fade-text");
-    void messageDiv.offsetWidth;
-    messageDiv.classList.add("fade-text");
-    
-    if(node.choices && node.choices.length) {
-        waitingForChoice = true;
-        renderChoices(node.choices);
-    } else {
-        waitingForChoice = false;
-        renderChoices([]);
-    }
+function displayNode(node){
+    renderVisuals(node);speakerDiv.innerText=node.speaker;messageDiv.innerText=node.text;
+    messageDiv.classList.remove("fade-text");void messageDiv.offsetWidth;messageDiv.classList.add("fade-text");
+    if(node.choices&&node.choices.length){waitingForChoice=true;renderChoices(node.choices);}else{waitingForChoice=false;renderChoices([]);}
 }
-
-function goToNode(id) {
-    if(gameData[id]) {
-        currentNodeId = id;
-        displayNode(gameData[currentNodeId]);
-    } else {
-        console.warn("Missing node:", id);
-        goToNode("start");
-    }
-}
-
-function nextStep() {
-    if(!waitingForChoice) {
-        let node = gameData[currentNodeId];
-        if(node && node.nextId) {
-            goToNode(node.nextId);
-        } else {
-            goToNode("start");
-        }
-    }
-}
-
-function resetGame() {
-    goToNode("start");
-}
-
-// Event Listeners
-nextBtn.onclick = nextStep;
-resetBtn.onclick = resetGame;
-
-// Start the game
+function goToNode(id){if(gameData[id]){currentNodeId=id;displayNode(gameData[currentNodeId]);}else{goToNode("start");}}
+function nextStep(){if(!waitingForChoice){let node=gameData[currentNodeId];if(node&&node.nextId)goToNode(node.nextId);else goToNode("start");}}
+function resetGame(){goToNode("start");}
+nextBtn.onclick=nextStep;resetBtn.onclick=resetGame;
 goToNode("start");
