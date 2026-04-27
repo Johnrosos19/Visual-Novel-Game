@@ -3,28 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>All In · Gambling vs Businessman · Extended Edition</title>
+    <title>All In · Gambling vs Businessman · Visual Novel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="vn-container">
-    <div class="art-stage">
-        <img id="bgImage" class="background-image" src="" alt="background">
-        <div class="character-portrait-frame" id="portraitFrame">
-            <img id="portraitImage" class="portrait-image" src="" alt="character">
-            <div class="character-name-tag" id="charNameTag"></div>
+<div class="vn-container" id="gameContainer">
+    <!-- ========== MAIN MENU SCREEN ========== -->
+    <div id="menuScreen" class="menu-screen">
+        <div class="menu-overlay"></div>
+        <div class="menu-content">
+            <h1 class="game-title">♢ ALL IN ♢</h1>
+            <p class="game-subtitle">A Visual Novel about Gambling, Power, and Redemption</p>
+            <div class="menu-buttons">
+                <button id="startBtn" class="menu-btn start-btn">▶ START GAME</button>
+                <button id="howToPlayBtn" class="menu-btn info-btn">❓ HOW TO PLAY</button>
+                <button id="creditsBtn" class="menu-btn credits-btn">🎭 CREDITS</button>
+            </div>
         </div>
     </div>
-    <div class="dialogue-panel">
-        <div class="speaker-name" id="speakerName">———</div>
-        <div class="message-text" id="messageText">Loading story...</div>
-        <div id="choicesContainer" class="choices-area"></div>
-        <div class="game-controls">
-            <button id="resetBtn" class="ctrl-btn">⟳ RESTART</button>
-            <button id="nextBtn" class="ctrl-btn">▶ CONTINUE</button>
+
+    <!-- ========== HOW TO PLAY MODAL ========== -->
+    <div id="howToPlayModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="closeHowToPlay">&times;</span>
+            <h2>📖 HOW TO PLAY</h2>
+            <div class="modal-body">
+                <p><strong>🎮 All In</strong> is an interactive visual novel where your choices shape the story.</p>
+                <ul>
+                    <li><strong>📜 Read the dialogue</strong> – Each scene presents a story snippet</li>
+                    <li><strong>🤔 Make choices</strong> – You'll have 4 options per scene</li>
+                    <li><strong>✨ Good/Bad indicators</strong> – Colored badges show the moral alignment</li>
+                    <li><strong>🔄 Restart anytime</strong> – Click RESTART to begin a new journey</li>
+                    <li><strong>🎯 Multiple endings</strong> – Your decisions lead to 10+ unique endings</li>
+                </ul>
+                <p><em>Every choice matters. Every decision changes your destiny.</em></p>
+            </div>
+            <button class="modal-close-btn" id="howToPlayClose">GOT IT</button>
         </div>
     </div>
-    <footer>♢ ALL IN · Extended Edition · Your Choices Shape the Journey ♢</footer>
+
+    <!-- ========== CREDITS MODAL ========== -->
+    <div id="creditsModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal" id="closeCredits">&times;</span>
+            <h2>🎭 CREDITS</h2>
+            <div class="modal-body">
+                <p><strong>ALL IN</strong></p>
+                <p>A story about gambling addiction, power, and the road to redemption.</p>
+                <br>
+                <p><strong>📝 Writing & Story:</strong> Created with passion</p>
+                <p><strong>🎨 Artwork:</strong> Custom illustrations</p>
+                <p><strong>💻 Development:</strong> HTML5 / CSS3 / JavaScript</p>
+                <br>
+                <p><em>Special thanks to all players who choose their own path.</em></p>
+                <br>
+                <p>© 2024 · All In Visual Novel</p>
+            </div>
+            <button class="modal-close-btn" id="creditsClose">BACK</button>
+        </div>
+    </div>
+
+    <!-- ========== GAME INTERFACE (Hidden until start) ========== -->
+    <div id="gameInterface" class="hidden">
+        <div class="art-stage">
+            <img id="bgImage" class="background-image" src="" alt="background">
+            <div class="character-portrait-frame" id="portraitFrame">
+                <img id="portraitImage" class="portrait-image" src="" alt="character">
+                <div class="character-name-tag" id="charNameTag"></div>
+            </div>
+        </div>
+        <div class="dialogue-panel">
+            <div class="speaker-name" id="speakerName">———</div>
+            <div class="message-text" id="messageText">Loading story...</div>
+            <div id="choicesContainer" class="choices-area"></div>
+            <div class="game-controls">
+                <button id="resetBtn" class="ctrl-btn">⟳ RESTART</button>
+                <button id="nextBtn" class="ctrl-btn">▶ CONTINUE</button>
+            </div>
+        </div>
+        <footer>♢ ALL IN · Your Choices Shape Your Destiny ♢</footer>
+    </div>
 </div>
 
 <script src="script.js"></script>
