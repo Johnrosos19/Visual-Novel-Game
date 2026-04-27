@@ -1,6 +1,6 @@
 // ============================================================
 // ALL IN - Gambling vs Businessman
-// EXTENDED EDITION: 10-12 choices before reaching each ending
+// COMPLETE EDITION: Main Menu + Full Extended Story
 // ============================================================
 
 // ========== IMAGE PATHS (Your exact file names) ==========
@@ -38,9 +38,9 @@ const IMAGE_PATHS = {
     }
 };
 
-// ========== EXTENDED GAME DATA (10-12 choices per path) ==========
+// ========== FULL GAME DATA (Extended - 80+ nodes) ==========
 const gameData = {
-    // ========== ACT 1: THE FALL (1-3) ==========
+    // ========== ACT 1: THE FALL ==========
     "start": {
         id: "start",
         speaker: "Leo",
@@ -56,7 +56,7 @@ const gameData = {
         nextId: "bad_accept_deal"
     },
 
-    // ========== BAD PATH: ACCEPTING KAEL (10-12 slides) ==========
+    // ========== BAD PATH: ACCEPTING KAEL ==========
     "bad_accept_deal": {
         id: "bad_accept_deal",
         speaker: "Kael",
@@ -70,6 +70,32 @@ const gameData = {
             { text: "🙅 'I can't hurt people. Find someone else.'", nextId: "good_walk_away", type: "good" }
         ],
         nextId: "bad_collect_1"
+    },
+
+    "greedy_question": {
+        id: "greedy_question",
+        speaker: "Leo",
+        text: "'How much are we talking?' Kael smiles. 'More than you've ever seen. Enough to buy your soul. Enough to forget every bad bet you ever made. But money comes with strings, Leo. Blood strings.'",
+        background: "kael_office",
+        sprite: "kael",
+        choices: [
+            { text: "💀 'I'm in.'", nextId: "bad_accept_deal", type: "bad" },
+            { text: "🙏 'I can't do this.'", nextId: "good_walk_away", type: "good" }
+        ],
+        nextId: "bad_accept_deal"
+    },
+
+    "curious_question": {
+        id: "curious_question",
+        speaker: "Leo",
+        text: "'Why me? I'm nobody. A washed-up gambler with empty pockets.' Kael leans closer. 'Because nobodies have nothing to lose. And nothing to lose means everything to gain. You're perfect, Leo. Perfect for the dirty work.'",
+        background: "kael_office",
+        sprite: "kael",
+        choices: [
+            { text: "💀 'Tell me the job.'", nextId: "bad_accept_deal", type: "bad" },
+            { text: "🙏 'I want out.'", nextId: "good_walk_away", type: "good" }
+        ],
+        nextId: "bad_accept_deal"
     },
 
     "bad_hesitate": {
@@ -379,7 +405,7 @@ const gameData = {
         nextId: "good_fbi_contact"
     },
 
-    // ========== GOOD PATH: SEEKING HELP (10-12 slides) ==========
+    // ========== GOOD PATH: SEEKING HELP ==========
     "good_walk_away": {
         id: "good_walk_away",
         speaker: "Leo",
@@ -672,11 +698,11 @@ const gameData = {
         nextId: "ending_justice"
     },
 
-    // ========== ENDINGS (All reachable after 10-12 choices) ==========
+    // ========== ENDINGS ==========
     "ending_redemption": {
         id: "ending_redemption",
         speaker: "Leo (Years Later)",
-        text: "I stand at the podium, looking out at a room full of strangers. 'My name is Leo, and I'm a recovering gambler.' They applaud. Elena sits in the front row, holding my hand. Sarah is next to her, now a teenager, beaming. I've been clean for five years. I run a recovery center that has helped over a thousand addicts. Kael is in prison—thanks to the evidence I helped gather. The casino lights no longer call to me. Instead, I see the light in people's eyes when they take their first step toward healing. The gambler died that night in the church. What rose from the ashes was a man who finally understands: the biggest win isn't money. It's forgiveness. [TRUE REDEMPTION — 12 choices]",
+        text: "I stand at the podium, looking out at a room full of strangers. 'My name is Leo, and I'm a recovering gambler.' They applaud. Elena sits in the front row, holding my hand. Sarah is next to her, now a teenager, beaming. I've been clean for five years. I run a recovery center that has helped over a thousand addicts. Kael is in prison—thanks to the evidence I helped gather. The casino lights no longer call to me. Instead, I see the light in people's eyes when they take their first step toward healing. The gambler died that night in the church. What rose from the ashes was a man who finally understands: the biggest win isn't money. It's forgiveness.",
         background: "support_group",
         sprite: "leo_neutral",
         choices: [{ text: "🌟 Play again", nextId: "start", type: "good" }],
@@ -686,7 +712,7 @@ const gameData = {
     "ending_justice": {
         id: "ending_justice",
         speaker: "News Anchor",
-        text: "In a historic trial, Kael is convicted on 47 counts, including racketeering, bribery, and three murders. Leo Marino, once a broke gambler, is hailed as a hero. He testifies for three days, his voice steady, his eyes clear. After the verdict, he visits Victor's daughter in the hospital—her surgery was paid for by an anonymous donor. She doesn't know it was Leo. He prefers it that way. 'I didn't do it for fame,' he tells a reporter. 'I did it because some debts can't be paid with money. Only with truth.' He opens a chain of recovery centers called 'The Second Deal.' His daughter visits every weekend. [JUSTICE — 11 choices]",
+        text: "In a historic trial, Kael is convicted on 47 counts, including racketeering, bribery, and three murders. Leo Marino, once a broke gambler, is hailed as a hero. He testifies for three days, his voice steady, his eyes clear. After the verdict, he visits Victor's daughter in the hospital—her surgery was paid for by an anonymous donor. She doesn't know it was Leo. He prefers it that way. 'I didn't do it for fame,' he tells a reporter. 'I did it because some debts can't be paid with money. Only with truth.' He opens a chain of recovery centers called 'The Second Deal.' His daughter visits every weekend.",
         background: "courtroom",
         sprite: "leo_neutral",
         choices: [{ text: "⚖️ Play again", nextId: "start", type: "good" }],
@@ -696,7 +722,7 @@ const gameData = {
     "ending_monster": {
         id: "ending_monster",
         speaker: "Kael (Narrating)",
-        text: "Leo sits in my chair now. The chair I built on bones and broken dreams. He's worse than I ever was. Last week, he ordered a hit on a rival. The week before, he ruined a family for fun. The gambler who had nothing now has everything—and it's still not enough. I watch from my prison cell, almost proud. Almost. Because I know the truth: the house always wins. And Leo? He's the house now. But houses crumble. And when his does, I'll be here, smiling. [EXTREME BAD — 10 choices]",
+        text: "Leo sits in my chair now. The chair I built on bones and broken dreams. He's worse than I ever was. Last week, he ordered a hit on a rival. The week before, he ruined a family for fun. The gambler who had nothing now has everything—and it's still not enough. I watch from my prison cell, almost proud. Almost. Because I know the truth: the house always wins. And Leo? He's the house now. But houses crumble. And when his does, I'll be here, smiling.",
         background: "luxury_office",
         sprite: "leo_evil",
         choices: [{ text: "💀 Play again", nextId: "start", type: "bad" }],
@@ -706,7 +732,7 @@ const gameData = {
     "ending_family": {
         id: "ending_family",
         speaker: "Sarah",
-        text: "Dad walks me down the aisle. Not for my wedding—for his five-year sobriety chip ceremony. 'I'm proud of you,' I whisper. He cries. I've only seen him cry twice before: the day Mom left, and today. After the ceremony, we go to the diner where he used to work. He owns it now. 'Family recipe,' he says, sliding a plate of pancakes toward me. 'No gambling, no lies, just batter and butter.' I take a bite. It tastes like forgiveness. [FAMILY REDEMPTION — 11 choices]",
+        text: "Dad walks me down the aisle. Not for my wedding—for his five-year sobriety chip ceremony. 'I'm proud of you,' I whisper. He cries. I've only seen him cry twice before: the day Mom left, and today. After the ceremony, we go to the diner where he used to work. He owns it now. 'Family recipe,' he says, sliding a plate of pancakes toward me. 'No gambling, no lies, just batter and butter.' I take a bite. It tastes like forgiveness.",
         background: "small_town",
         sprite: "daughter",
         choices: [{ text: "🏠 Play again", nextId: "start", type: "good" }],
@@ -716,7 +742,7 @@ const gameData = {
     "ending_inspire": {
         id: "ending_inspire",
         speaker: "Leo (TED Talk)",
-        text: "The applause is deafening. I stand in the spotlight, holding my five-year chip. 'My name is Leo, and I'm a gambler. Not anymore. But the urge never goes away. Every day, I choose not to place a bet. Every day, I choose my daughter. My friends. My life. If you're out there, drowning in debt or shame, know this: the only bet that matters is the one you place on yourself.' The video goes viral. Fifty million views. My phone doesn't stop ringing. I don't answer. I have a meeting in an hour. There's a man there who lost his house today. He needs to hear that it's not the end. It's just the beginning. [INSPIRATION — 11 choices]",
+        text: "The applause is deafening. I stand in the spotlight, holding my five-year chip. 'My name is Leo, and I'm a gambler. Not anymore. But the urge never goes away. Every day, I choose not to place a bet. Every day, I choose my daughter. My friends. My life. If you're out there, drowning in debt or shame, know this: the only bet that matters is the one you place on yourself.' The video goes viral. Fifty million views. My phone doesn't stop ringing. I don't answer. I have a meeting in an hour. There's a man there who lost his house today. He needs to hear that it's not the end. It's just the beginning.",
         background: "support_group",
         sprite: "leo_neutral",
         choices: [{ text: "📢 Play again", nextId: "start", type: "good" }],
@@ -726,7 +752,7 @@ const gameData = {
     "ending_bad_soul": {
         id: "ending_bad_soul",
         speaker: "Narrator",
-        text: "The paramedics find him in the bathroom of the Bellagio. Needle still in his arm. Slot machine blinking 'JACKPOT' in the next room. His daughter's last text, unread: 'Dad, please call me.' No one comes to claim the body. The casino sweeps it under the rug. The next day, someone else sits at his favorite machine. The wheel spins. The house always wins. [LOST SOUL — 10 choices]",
+        text: "The paramedics find him in the bathroom of the Bellagio. Needle still in his arm. Slot machine blinking 'JACKPOT' in the next room. His daughter's last text, unread: 'Dad, please call me.' No one comes to claim the body. The casino sweeps it under the rug. The next day, someone else sits at his favorite machine. The wheel spins. The house always wins.",
         background: "casino_empty",
         sprite: "leo_sad",
         choices: [{ text: "💀 Play again", nextId: "start", type: "bad" }],
@@ -736,7 +762,7 @@ const gameData = {
     "ending_relapse": {
         id: "ending_relapse",
         speaker: "Narrator",
-        text: "Leo relapsed on day 103. He lost his job, his apartment, his daughter's trust. Elena stopped answering his calls. Now he sleeps in his car behind the casino. Sometimes he goes inside, just to feel the lights on his face. He knows he'll die here. He just doesn't care anymore. [RELAPSE — 9 choices]",
+        text: "Leo relapsed on day 103. He lost his job, his apartment, his daughter's trust. Elena stopped answering his calls. Now he sleeps in his car behind the casino. Sometimes he goes inside, just to feel the lights on his face. He knows he'll die here. He just doesn't care anymore.",
         background: "casino_night",
         sprite: "leo_sad",
         choices: [{ text: "🔁 Play again", nextId: "start", type: "bad" }],
@@ -746,7 +772,7 @@ const gameData = {
     "ending_runaway": {
         id: "ending_runaway",
         speaker: "Leo",
-        text: "I changed my name. Started over in a quiet town. The past haunts my dreams, but I survive. Alone. It's not victory. But it's peace. Some days, I think about calling Sarah. But I'm afraid of what I'll hear. Afraid she won't answer. Afraid she will. So I stay quiet. Stay hidden. Stay safe. [RUNAWAY — 10 choices]",
+        text: "I changed my name. Started over in a quiet town. The past haunts my dreams, but I survive. Alone. It's not victory. But it's peace. Some days, I think about calling Sarah. But I'm afraid of what I'll hear. Afraid she won't answer. Afraid she will. So I stay quiet. Stay hidden. Stay safe.",
         background: "small_town",
         sprite: "leo_sad",
         choices: [{ text: "🌅 Play again", nextId: "start", type: "neutral" }],
@@ -756,7 +782,7 @@ const gameData = {
     "ending_martyr": {
         id: "ending_martyr",
         speaker: "News Anchor",
-        text: "Leo died taking down Kael. His evidence convicted 30 criminals. He's buried as a hero. His daughter places sunflowers on his grave every Sunday. Elena visits too. She leaves a chip—ninety days. 'You made it,' she whispers. 'You finally made it.' [MARTYR — 10 choices]",
+        text: "Leo died taking down Kael. His evidence convicted 30 criminals. He's buried as a hero. His daughter places sunflowers on his grave every Sunday. Elena visits too. She leaves a chip—ninety days. 'You made it,' she whispers. 'You finally made it.'",
         background: "courtroom",
         sprite: "leo_angry",
         choices: [{ text: "🕯️ Play again", nextId: "start", type: "neutral" }],
@@ -768,6 +794,19 @@ const gameData = {
 let currentNodeId = "start";
 let waitingForChoice = false;
 
+// DOM Elements
+const menuScreen = document.getElementById("menuScreen");
+const gameInterface = document.getElementById("gameInterface");
+const startBtn = document.getElementById("startBtn");
+const howToPlayBtn = document.getElementById("howToPlayBtn");
+const creditsBtn = document.getElementById("creditsBtn");
+const howToPlayModal = document.getElementById("howToPlayModal");
+const creditsModal = document.getElementById("creditsModal");
+const closeHowToPlay = document.getElementById("closeHowToPlay");
+const closeCredits = document.getElementById("closeCredits");
+const howToPlayClose = document.getElementById("howToPlayClose");
+const creditsClose = document.getElementById("creditsClose");
+
 const bgImage = document.getElementById("bgImage");
 const portraitImage = document.getElementById("portraitImage");
 const speakerDiv = document.getElementById("speakerName");
@@ -777,6 +816,42 @@ const nextBtn = document.getElementById("nextBtn");
 const resetBtn = document.getElementById("resetBtn");
 const charNameTag = document.getElementById("charNameTag");
 
+// ========== MENU FUNCTIONS ==========
+function startGame() {
+    menuScreen.classList.add("hidden");
+    gameInterface.classList.remove("hidden");
+    goToNode("start");
+}
+
+function showHowToPlay() {
+    howToPlayModal.classList.remove("hidden");
+}
+
+function showCredits() {
+    creditsModal.classList.remove("hidden");
+}
+
+function closeModals() {
+    howToPlayModal.classList.add("hidden");
+    creditsModal.classList.add("hidden");
+}
+
+// Event listeners for menu
+if (startBtn) startBtn.addEventListener("click", startGame);
+if (howToPlayBtn) howToPlayBtn.addEventListener("click", showHowToPlay);
+if (creditsBtn) creditsBtn.addEventListener("click", showCredits);
+if (closeHowToPlay) closeHowToPlay.addEventListener("click", closeModals);
+if (closeCredits) closeCredits.addEventListener("click", closeModals);
+if (howToPlayClose) howToPlayClose.addEventListener("click", closeModals);
+if (creditsClose) creditsClose.addEventListener("click", closeModals);
+
+// Close modal when clicking outside
+window.addEventListener("click", (e) => {
+    if (e.target === howToPlayModal) closeModals();
+    if (e.target === creditsModal) closeModals();
+});
+
+// ========== GAME FUNCTIONS ==========
 function getImagePath(type, key) {
     if (type === 'bg') {
         return IMAGE_PATHS.backgrounds[key] || IMAGE_PATHS.backgrounds.default;
@@ -863,7 +938,8 @@ function resetGame() {
     goToNode("start");
 }
 
-nextBtn.onclick = nextStep;
-resetBtn.onclick = resetGame;
+if (nextBtn) nextBtn.onclick = nextStep;
+if (resetBtn) resetBtn.onclick = resetGame;
 
-goToNode("start");
+// Game starts from menu - user must click Start
+console.log("Game ready. Click START to begin your journey.");
