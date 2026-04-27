@@ -19,7 +19,7 @@ body {
     width: 100%;
     background: #1a1a1a;
     border-radius: 36px;
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.7);
     overflow: hidden;
 }
 
@@ -33,14 +33,13 @@ body {
     border-bottom: 2px solid #d4af37;
 }
 
-#bgCanvas {
+.background-image {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background: #0a0a0a;
     z-index: 1;
 }
 
@@ -51,11 +50,10 @@ body {
     width: 180px;
     height: 220px;
     z-index: 2;
-    background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(30,20,10,0.9));
+    background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(30,20,10,0.8));
     border-radius: 20px;
     border: 3px solid #d4af37;
     box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-    overflow: hidden;
     backdrop-filter: blur(4px);
     display: flex;
     flex-direction: column;
@@ -63,13 +61,15 @@ body {
     padding-top: 10px;
 }
 
-#portraitCanvas {
-    width: 140px;
-    height: 140px;
+.portrait-image {
+    width: 130px;
+    height: 130px;
     display: block;
     border-radius: 50%;
     border: 2px solid #d4af37;
     margin-top: 5px;
+    object-fit: cover;
+    background: #1a1a2a;
 }
 
 .character-name-tag {
@@ -208,6 +208,13 @@ footer {
     background: #0a0a0a;
 }
 
+/* Loading state */
+.loading {
+    opacity: 0.5;
+    filter: blur(2px);
+    transition: all 0.3s;
+}
+
 @media (max-width: 800px) {
     .character-portrait-frame {
         width: 120px;
@@ -215,7 +222,7 @@ footer {
         bottom: 10px;
         left: 10px;
     }
-    #portraitCanvas {
+    .portrait-image {
         width: 90px;
         height: 90px;
     }
