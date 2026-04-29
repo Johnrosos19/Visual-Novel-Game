@@ -25,6 +25,129 @@ body {
     min-height: 600px;
 }
 
+/* ========== LANDING PAGE STYLES ========== */
+.landing-page {
+    position: relative;
+    width: 100%;
+    min-height: 600px;
+    background-image: url('casino_night.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(30,20,10,0.9));
+    z-index: 1;
+}
+
+.landing-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 3rem 2rem;
+    max-width: 900px;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.landing-title {
+    font-size: 5.5rem;
+    font-weight: 800;
+    color: #d4af37;
+    text-shadow: 0 0 30px rgba(212,175,55,0.5), 4px 4px 0px #1a1a1a;
+    letter-spacing: 10px;
+    margin-bottom: 0.5rem;
+}
+
+.title-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #d4af37, transparent);
+    margin: 1rem auto;
+}
+
+.landing-tagline {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    letter-spacing: 2px;
+    margin-bottom: 3rem;
+    text-shadow: 1px 1px 2px black;
+}
+
+.landing-features {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+}
+
+.feature-card {
+    background: rgba(30, 30, 50, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 220px;
+    border: 1px solid rgba(212,175,55,0.3);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: #d4af37;
+    background: rgba(30, 30, 50, 0.9);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.8rem;
+}
+
+.feature-card h3 {
+    color: #d4af37;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.feature-card p {
+    color: #ccc;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.enter-game-btn {
+    background: linear-gradient(135deg, #d4af37, #b8860b);
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #1a1a1a;
+    border-radius: 60px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    box-shadow: 0 5px 20px rgba(212,175,55,0.4);
+    margin-bottom: 2rem;
+}
+
+.enter-game-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 30px rgba(212,175,55,0.6);
+}
+
+.landing-footer {
+    margin-top: 1rem;
+    font-size: 0.7rem;
+    color: #888;
+}
+
 /* ========== MAIN MENU STYLES ========== */
 .menu-screen {
     position: relative;
@@ -114,6 +237,19 @@ body {
     background: #d4af37;
     color: #1a1a1a;
     transform: scale(1.02);
+}
+
+.back-btn {
+    background: rgba(50, 40, 30, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid #888;
+    color: #ccc;
+}
+
+.back-btn:hover {
+    background: #555;
+    color: white;
+    border-color: #aaa;
 }
 
 /* ========== MODAL STYLES ========== */
@@ -345,6 +481,17 @@ body {
     transform: scale(1.02);
 }
 
+.back-menu-btn {
+    border-color: #888;
+    color: #ccc;
+}
+
+.back-menu-btn:hover {
+    background: #555;
+    border-color: #aaa;
+    color: white;
+}
+
 .fade-text {
     animation: gentleFade 0.2s ease-out;
 }
@@ -442,16 +589,29 @@ footer {
     .message-text {
         font-size: 1rem;
     }
-    .game-title {
+    .landing-title, .game-title {
         font-size: 2.5rem;
         letter-spacing: 4px;
     }
-    .game-subtitle {
+    .landing-tagline, .game-subtitle {
         font-size: 0.9rem;
     }
-    .menu-btn {
+    .menu-btn, .enter-game-btn {
         width: 200px;
         padding: 0.8rem 1.5rem;
         font-size: 1rem;
+    }
+    .feature-card {
+        width: 160px;
+        padding: 1rem;
+    }
+    .feature-icon {
+        font-size: 1.8rem;
+    }
+    .feature-card h3 {
+        font-size: 0.9rem;
+    }
+    .feature-card p {
+        font-size: 0.7rem;
     }
 }

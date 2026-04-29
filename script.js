@@ -1,6 +1,6 @@
 // ============================================================
 // ALL IN - Gambling vs Businessman
-// COMPLETE EDITION: Main Menu + Full Extended Story
+// COMPLETE EDITION: Landing Page + Main Menu + Full Game
 // ============================================================
 
 // ========== IMAGE PATHS (Your exact file names) ==========
@@ -38,7 +38,7 @@ const IMAGE_PATHS = {
     }
 };
 
-// ========== FULL GAME DATA (Extended - 80+ nodes) ==========
+// ========== FULL GAME DATA (All 80+ Nodes) ==========
 const gameData = {
     // ========== ACT 1: THE FALL ==========
     "start": {
@@ -54,22 +54,6 @@ const gameData = {
             { text: "🙏 'I need help, not another demon.' (Good Path)", nextId: "good_walk_away", type: "good" }
         ],
         nextId: "bad_accept_deal"
-    },
-
-    // ========== BAD PATH: ACCEPTING KAEL ==========
-    "bad_accept_deal": {
-        id: "bad_accept_deal",
-        speaker: "Kael",
-        text: "'Welcome to my world, Leo. First rule: loyalty above all. Second: never gamble with my money. Third...' He slides a gun across the table. 'Your first test is tonight. A man named Victor Ross owes me two hundred thousand. He's hiding in a rundown apartment on Fifth. Make him pay. Not with words—with presence. Show him what happens when someone steals from me. Do this, and your debt disappears. You'll have a place at my table. Refuse...' He leaves the threat hanging in the air like a guillotine blade. 'What's your answer, Marino?'",
-        background: "kael_office",
-        sprite: "kael_evil",
-        choices: [
-            { text: "🔫 'I'll do it. I have nothing left to lose.'", nextId: "bad_collect_1", type: "bad" },
-            { text: "😰 'What if he doesn't pay?'", nextId: "bad_hesitate", type: "bad" },
-            { text: "❓ 'Tell me more about Victor first.'", nextId: "bad_ask_about_victor", type: "neutral" },
-            { text: "🙅 'I can't hurt people. Find someone else.'", nextId: "good_walk_away", type: "good" }
-        ],
-        nextId: "bad_collect_1"
     },
 
     "greedy_question": {
@@ -96,6 +80,21 @@ const gameData = {
             { text: "🙏 'I want out.'", nextId: "good_walk_away", type: "good" }
         ],
         nextId: "bad_accept_deal"
+    },
+
+    "bad_accept_deal": {
+        id: "bad_accept_deal",
+        speaker: "Kael",
+        text: "'Welcome to my world, Leo. First rule: loyalty above all. Second: never gamble with my money. Third...' He slides a gun across the table. 'Your first test is tonight. A man named Victor Ross owes me two hundred thousand. He's hiding in a rundown apartment on Fifth. Make him pay. Not with words—with presence. Show him what happens when someone steals from me. Do this, and your debt disappears. You'll have a place at my table. Refuse...' He leaves the threat hanging in the air like a guillotine blade. 'What's your answer, Marino?'",
+        background: "kael_office",
+        sprite: "kael_evil",
+        choices: [
+            { text: "🔫 'I'll do it. I have nothing left to lose.'", nextId: "bad_collect_1", type: "bad" },
+            { text: "😰 'What if he doesn't pay?'", nextId: "bad_hesitate", type: "bad" },
+            { text: "❓ 'Tell me more about Victor first.'", nextId: "bad_ask_about_victor", type: "neutral" },
+            { text: "🙅 'I can't hurt people. Find someone else.'", nextId: "good_walk_away", type: "good" }
+        ],
+        nextId: "bad_collect_1"
     },
 
     "bad_hesitate": {
@@ -795,11 +794,15 @@ let currentNodeId = "start";
 let waitingForChoice = false;
 
 // DOM Elements
+const landingPage = document.getElementById("landingPage");
 const menuScreen = document.getElementById("menuScreen");
 const gameInterface = document.getElementById("gameInterface");
+const enterGameBtn = document.getElementById("enterGameBtn");
 const startBtn = document.getElementById("startBtn");
 const howToPlayBtn = document.getElementById("howToPlayBtn");
 const creditsBtn = document.getElementById("creditsBtn");
+const backToLandingBtn = document.getElementById("backToLandingBtn");
+const menuBackBtn = document.getElementById("menuBackBtn");
 const howToPlayModal = document.getElementById("howToPlayModal");
 const creditsModal = document.getElementById("creditsModal");
 const closeHowToPlay = document.getElementById("closeHowToPlay");
@@ -816,30 +819,55 @@ const nextBtn = document.getElementById("nextBtn");
 const resetBtn = document.getElementById("resetBtn");
 const charNameTag = document.getElementById("charNameTag");
 
-// ========== MENU FUNCTIONS ==========
+// ========== NAVIGATION FUNCTIONS ==========
+function showLandingPage() {
+    if (landingPage) landingPage.classList.remove("hidden");
+    if (menuScreen) menuScreen.classList.add("hidden");
+    if (gameInterface) gameInterface.classList.add("hidden");
+    closeModals();
+}
+
+function showMenu() {
+    if (landingPage) landingPage.classList.add("hidden");
+    if (menuScreen) menuScreen.classList.remove("hidden");
+    if (gameInterface) gameInterface.classList.add("hidden");
+    closeModals();
+}
+
 function startGame() {
-    menuScreen.classList.add("hidden");
-    gameInterface.classList.remove("hidden");
+    if (landingPage) landingPage.classList.add("hidden");
+    if (menuScreen) menuScreen.classList.add("hidden");
+    if (gameInterface) gameInterface.classList.remove("hidden");
     goToNode("start");
 }
 
 function showHowToPlay() {
-    howToPlayModal.classList.remove("hidden");
+    if (howToPlayModal) howToPlayModal.classList.remove("hidden");
 }
 
 function showCredits() {
-    creditsModal.classList.remove("hidden");
+    if (creditsModal) creditsModal.classList.remove("hidden");
 }
 
 function closeModals() {
-    howToPlayModal.classList.add("hidden");
-    creditsModal.classList.add("hidden");
+    if (howToPlayModal) howToPlayModal.classList.add("hidden");
+    if (creditsModal) creditsModal.classList.add("hidden");
 }
 
-// Event listeners for menu
+function backToMenuFromGame() {
+    if (landingPage) landingPage.classList.add("hidden");
+    if (menuScreen) menuScreen.classList.remove("hidden");
+    if (gameInterface) gameInterface.classList.add("hidden");
+    closeModals();
+}
+
+// ========== EVENT LISTENERS ==========
+if (enterGameBtn) enterGameBtn.addEventListener("click", showMenu);
 if (startBtn) startBtn.addEventListener("click", startGame);
 if (howToPlayBtn) howToPlayBtn.addEventListener("click", showHowToPlay);
 if (creditsBtn) creditsBtn.addEventListener("click", showCredits);
+if (backToLandingBtn) backToLandingBtn.addEventListener("click", showLandingPage);
+if (menuBackBtn) menuBackBtn.addEventListener("click", backToMenuFromGame);
 if (closeHowToPlay) closeHowToPlay.addEventListener("click", closeModals);
 if (closeCredits) closeCredits.addEventListener("click", closeModals);
 if (howToPlayClose) howToPlayClose.addEventListener("click", closeModals);
@@ -862,12 +890,10 @@ function getImagePath(type, key) {
 
 function renderVisuals(node) {
     const bgPath = getImagePath('bg', node.background);
-    bgImage.src = bgPath;
-    bgImage.alt = node.background;
+    if (bgImage) bgImage.src = bgPath;
     
     const portraitPath = getImagePath('char', node.sprite);
-    portraitImage.src = portraitPath;
-    portraitImage.alt = node.sprite;
+    if (portraitImage) portraitImage.src = portraitPath;
     
     const nameMap = {
         "leo_sad": "LEO (Broken)", "leo_angry": "LEO (Raging)", "leo_neutral": "LEO",
@@ -875,10 +901,11 @@ function renderVisuals(node) {
         "maria": "ELENA", "priest": "FATHER MICHAEL", "debtor": "VICTOR ROSS",
         "politician": "SENATOR HAYES", "agent": "AGENT WILLIAMS", "daughter": "SARAH"
     };
-    charNameTag.innerText = nameMap[node.sprite] || node.sprite?.toUpperCase() || "???";
+    if (charNameTag) charNameTag.innerText = nameMap[node.sprite] || node.sprite?.toUpperCase() || "???";
 }
 
 function renderChoices(choices) {
+    if (!choicesDiv) return;
     choicesDiv.innerHTML = "";
     if (!choices || choices.length === 0) {
         choicesDiv.classList.add("hidden");
@@ -900,12 +927,14 @@ function renderChoices(choices) {
 
 function displayNode(node) {
     renderVisuals(node);
-    speakerDiv.innerText = node.speaker;
-    messageDiv.innerText = node.text;
+    if (speakerDiv) speakerDiv.innerText = node.speaker;
+    if (messageDiv) messageDiv.innerText = node.text;
     
-    messageDiv.classList.remove("fade-text");
-    void messageDiv.offsetWidth;
-    messageDiv.classList.add("fade-text");
+    if (messageDiv) {
+        messageDiv.classList.remove("fade-text");
+        void messageDiv.offsetWidth;
+        messageDiv.classList.add("fade-text");
+    }
     
     if (node.choices && node.choices.length) {
         waitingForChoice = true;
@@ -941,5 +970,5 @@ function resetGame() {
 if (nextBtn) nextBtn.onclick = nextStep;
 if (resetBtn) resetBtn.onclick = resetGame;
 
-// Game starts from menu - user must click Start
-console.log("Game ready. Click START to begin your journey.");
+console.log("All In Visual Novel - Ready to Play!");
+console.log("Click ENTER THE GAME on the landing page to begin your journey.");
